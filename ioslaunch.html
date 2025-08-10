@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>تحميل تطبيق ios مع شرح خطوات التحميل</title>
+<style>
+  body {
+    background-color: #1b4242;
+    font-family: Arial, sans-serif;
+    color: white;
+    text-align: center;
+    padding: 30px 20px;
+    direction: rtl;
+    user-select: none;
+    margin: 0;
+  }
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  a.download-link {
+    display: inline-block;
+    cursor: pointer;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    transition: transform 0.2s ease;
+    width: 220px;
+    height: 220px;
+    overflow: hidden;
+    outline: none;
+    text-decoration: none;
+  }
+  a.download-link img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+    -webkit-user-drag: none;
+  }
+  a.download-link:hover {
+    transform: scale(1.05);
+  }
+  a.download-link:focus,
+  a.download-link:active {
+    outline: none;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  }
+  .step-number {
+    font-weight: bold;
+    font-size: 9px;
+    margin-top: 8px;
+  }
+  .how-to-toggle {
+    margin-top: 25px;
+    color: #A0B254;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 18px;
+    user-select: text;
+    outline: none;
+  }
+  .how-to-toggle:focus,
+  .how-to-toggle:active {
+    outline: none;
+  }
+  .steps-details {
+    margin-top: 30px;
+    background: rgba(255 255 255 / 0.1);
+    border-radius: 15px;
+    padding: 20px 25px;
+    display: none;
+    text-align: right;
+    font-size: 9px;
+    line-height: 1.5;
+    user-select: text;
+  }
+  .step-item {
+    margin-bottom: 25px;
+  }
+  .step-item img {
+    width: 65%;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    margin-bottom: 10px;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+  .step-item .caption {
+    font-weight: bold;
+    font-size: 9px;
+  }
+  @media (max-width: 600px) {
+    a.download-link {
+      width: 180px;
+      height: 180px;
+    }
+    .step-item img {
+      width: 90%;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <a 
+    class="download-link" 
+    href="#" 
+    download 
+    aria-label="تثيب الموقع للأيفون"
+    rel="nofollow noopener noreferrer"
+    target="_blank"
+    tabindex="0"
+  >
+    <img src="https://raw.githubusercontent.com/elieahmar2/Bqerzala-pics-and-icons/refs/heads/main/download%20icon%20iphone.png" alt="add web to home screen" draggable="false" />
+  </a>
+  <div class="step-number">لا يوجد تطبيق متوفر حالياً للأيفون ، يمكنك وضع الويبسايت على الشاشة الرئيسية </div>
+
+  <div class="how-to-toggle" id="toggleSteps" tabindex="0" role="button" aria-pressed="false" aria-controls="stepsDetails">
+    كيفية وضعه على الشاشة الرئيسية وشرح الخطوات
+  </div>
+
+  <div class="steps-details" id="stepsDetails" role="region" aria-live="polite" tabindex="0">
+
+    <div class="step-item">
+      <img src="https://raw.githubusercontent.com/elieahmar2/Bqerzala-pics-and-icons/refs/heads/main/tut1_ios.jpg" alt="اضغط على share" draggable="false" />
+      <div class="caption"> اضغط على share</div>
+    </div>
+
+    <div class="step-item">
+      <img src="https://raw.githubusercontent.com/elieahmar2/Bqerzala-pics-and-icons/refs/heads/main/tut2_ios.jpg" alt="بعدها اضغط على add to home screen" draggable="false" />
+      <div class="caption">بعدها اضغط على add to home screen</div>
+    </div>
+
+    <div class="step-item">
+      <img src="https://raw.githubusercontent.com/elieahmar2/Bqerzala-pics-and-icons/refs/heads/main/tut3_ios.jpg" alt="قم بتسمية الموقع بالإسم الذي تريده من بعدها add" draggable="false" />
+      <div class="caption">قم بتسمية الموقع بالإسم الذي تريده من بعدها add</div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+  const toggleBtn = document.getElementById('toggleSteps');
+  const stepsDiv = document.getElementById('stepsDetails');
+
+  function toggleDetails() {
+    if (stepsDiv.style.display === 'block') {
+      stepsDiv.style.display = 'none';
+      toggleBtn.textContent = 'كيفية التحميل وشرح الخطوات';
+      toggleBtn.setAttribute('aria-pressed', 'false');
+    } else {
+      stepsDiv.style.display = 'block';
+      toggleBtn.textContent = 'إخفاء طرق التثبيت';
+      toggleBtn.setAttribute('aria-pressed', 'true');
+      stepsDiv.scrollIntoView({behavior: 'smooth'});
+    }
+  }
+
+  toggleBtn.addEventListener('click', toggleDetails);
+  toggleBtn.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      toggleDetails();
+    }
+  });
+</script>
+
+</body>
+</html>
