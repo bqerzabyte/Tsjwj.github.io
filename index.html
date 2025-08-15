@@ -214,7 +214,7 @@
     <article class="article">
       <h3>افتتاح معرض فني لأعمال شباب بقرزلا</h3>
       <time datetime="2025-06-12T18:30">12 حزيران 2025 - 06:30 مساءً</time>
-      <p>استضافت قاعة البلدية معرضاً فنياً مميزاً يعرض أعمال الشباب الموهوبين من بقرزلا، حيث شهد المعرض إقبالاً كبيراً وتفاعلًا من المجتمع المحلي.</p>
+<p>استضافت قاعة البلدية معرضاً فنياً مميزاً يعرض أعمال الشباب الموهوبين من بقرزلا، حيث شهد المعرض إقبالاً كبيراً وتفاعلًا من المجتمع المحلي.</p>
       <img src="https://cdn.glitch.global/01ad90b5-5958-4808-868b-6607b1facd24/art-exhibit.jpg?v=1749783772491" alt="معرض فني في بقرزلا" />
     </article>
     <article class="article">
@@ -229,37 +229,6 @@
     &copy; 2025 بقرزلا - الموقع الرسمي | جميع الحقوق محفوظة
   </footer>
   
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
-    import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-messaging.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyC2wTp0Afn_XmWCKhk1Bx3o13imBc1zIUc",
-      authDomain: "bqerzala-ae4d8.firebaseapp.com",
-      projectId: "bqerzala-ae4d8",
-      storageBucket: "bqerzala-ae4d8.appspot.com",
-      messagingSenderId: "912894745948",
-      appId: "1:912894745948:web:773493f7afdd4866d03599",
-      measurementId: "G-1NMXR2DFYN"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const messaging = getMessaging(app);
-
-    document.getElementById('enableNotifications').addEventListener('click', () => {
-      Notification.requestPermission().then(permission => {
-        if (permission === 'granted') {
-          getToken(messaging, { vapidKey: 'BJY1HhXvT8V4AYQ97Legi5zSbRNq4WhXcKw_ikSXjYGa7jmzanXwYpxp5tylGlFTjhc6LtY7PUUg5wXhjkF3dRM' })
-            .then(currentToken => {
-              if (currentToken) {
-                console.log('Token:', currentToken);
-              }
-            });
-        }
-      });
-    });
-  </script>
-
   <script>
     function doGoogleSearch(e) {
       e.preventDefault();
@@ -293,5 +262,45 @@
       });
     });
   </script>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+    import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-messaging.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyC2wTp0Afn_XmWCKhk1Bx3o13imBc1zIUc",
+      authDomain: "bqerzala-ae4d8.firebaseapp.com",
+      projectId: "bqerzala-ae4d8",
+      storageBucket: "bqerzala-ae4d8.appspot.com",
+      messagingSenderId: "912894745948",
+      appId: "1:912894745948:web:773493f7afdd4866d03599",
+      measurementId: "G-1NMXR2DFYN"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const messaging = getMessaging(app);
+
+    document.getElementById('enableNotifications').addEventListener('click', () => {
+      const confirmEnable = confirm("هل تريد تفعيل الإشعارات ليصلك كل جديد عن بقرزلا؟");
+      if (confirmEnable) {
+        Notification.requestPermission().then(permission => {
+          if (permission === 'granted') {
+            getToken(messaging, { vapidKey: 'BJY1HhXvT8V4AYQ97Legi5zSbRNq4WhXcKw_ikSXjYGa7jmzanXwYpxp5tylGlFTjhc6LtY7PUUg5wXhjkF3dRM' })
+              .then(currentToken => {
+                if (currentToken) {
+                  alert("تم! شكراً لأنك مهتم بالإشعارات.");
+                  document.getElementById('enableNotifications').style.display = 'none';
+                }
+              });
+          } else {
+            alert("عذراً، لم يتم تفعيل الإشعارات.");
+          }
+        });
+      } else {
+        alert("يؤسفنا ذلك! يبدو أنك غير مهتم حالياً، نأمل أن تعود لتفعيل الإشعارات قريباً.");
+      }
+    });
+  </script>
+
 </body>
 </html>
