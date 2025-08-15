@@ -179,11 +179,17 @@
   </style>
 </head>
 <body>
+  <script>
+    if (!navigator.onLine) {
+      window.location.href = "no_internet.html";
+    }
+  </script>
+
   <header>
     <img src="https://cdn.glitch.global/01ad90b5-5958-4808-868b-6607b1facd24/Logo%20website%20bqerzala.9.png?v=1750385967410" alt="شعار بقرزلا" />
     <h1>الموقع الرسمي</h1>
   </header>
-
+  
   <nav>
     <a href="mo2asasat.html">مؤسسات</a>
     <a href="daleelnumbers.html">أرقام</a>
