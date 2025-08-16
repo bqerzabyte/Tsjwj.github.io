@@ -213,8 +213,7 @@
   <a href="ta2es.html">الطقس</a>
   <a href="contactus.html">تواصل معنا</a>
   <a href="downloadapp.html">حمّل التطبيق</a>
-  <a id="iosNotificationBtn" href="#" style="display: none;">الإشعارات للأيفون</a>
-  <a id="installBtn" href="#" style="display: none;">إضافة إلى الشاشة الرئيسية</a>
+  <a id="iosNotificationBtn" href="#" style="display: none;">تفعيل الإشعارات</a>
   <form id="googleSearchForm" onsubmit="return doGoogleSearch(event)" role="search" aria-label="بحث جوجل في بقرزلا">
     <input type="text" id="searchInput" placeholder="ابحث في جوجل عن بقرزلا" aria-label="بحث في جوجل" />
     <button type="submit" aria-label="زر البحث">
@@ -235,12 +234,10 @@
 
 <script type="module">
 let unreadNotifications = 0;
-let deferredPrompt;
 
 document.addEventListener('DOMContentLoaded', function() {
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
                 (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-  const isAndroid = /Android/i.test(navigator.userAgent);
   
   if (isIOS) {
     const iosNotificationBtn = document.getElementById('iosNotificationBtn');
@@ -253,14 +250,34 @@ document.addEventListener('DOMContentLoaded', function() {
     } else if (Notification.permission === 'granted') {
       iosNotificationBtn.style.display = 'none';
     }
-  } else if (isAndroid && Notification.permission === 'default') {
+  } else if (Notification.permission === 'default') {
     requestNotificationPermission().catch(() => {});
   }
   
-  setupInstallButton();
+  setupIOSAddToHomeScreen();
   loadNews();
   initBadge();
 });
+
+function setupIOSAddToHomeScreen() {
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  if (isIOS && window.navigator.standalone === false) {
+    const addToHome = document.createElement('div');
+    addToHome.innerHTML = `
+      <div style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); 
+      background: #1b4242; color: #cdeed6; padding: 12px 20px; border-radius: 8px; 
+      border: 2px solid #4fbdbaff; box-shadow: 0 0 10px rgba(0,0,0,0.5); z-index: 1000;">
+        <p style="margin: 0;">لإضافة التطبيق إلى الشاشة الرئيسية: 
+        <br>1. اضغط على زر المشاركة
+        <br>2. اختر "إضافة إلى الشاشة الرئيسية"</p>
+      </div>
+    `;
+    document.body.appendChild(addToHome);
+    setTimeout(() => {
+      document.body.removeChild(addToHome);
+    }, 10000);
+  }
+}
 
 function initBadge() {
   if ('setAppBadge' in navigator) {
@@ -317,27 +334,6 @@ async function requestNotificationPermission() {
   } catch (error) {
     throw error;
   }
-}
-
-function setupInstallButton() {
-  const installBtn = document.getElementById('installBtn');
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    installBtn.style.display = 'inline-block';
-  });
-  installBtn.addEventListener('click', async () => {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      deferredPrompt = null;
-      installBtn.style.display = 'none';
-    }
-  });
-  window.addEventListener('appinstalled', () => {
-    installBtn.style.display = 'none';
-    deferredPrompt = null;
-  });
 }
 
 async function loadNews() {
@@ -411,18 +407,6 @@ onMessage(messaging, (payload) => {
         window.location.href = event.target.data.url;
       }
     });
-    
-    const style = document.createElement('style');
-    style.textContent = `
-      .notification-style {
-        background-color: #1b4242;
-        color: #cdeed6;
-        border: 2px solid #4fbdbaff;
-        border-radius: 12px;
-        padding: 15px;
-      }
-    `;
-    document.head.appendChild(style);
   }
 });
 
