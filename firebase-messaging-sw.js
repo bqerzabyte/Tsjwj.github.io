@@ -14,34 +14,27 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
+// استقبال النوتيفيكيشن بالخلفية
 messaging.onBackgroundMessage((payload) => {
-  const notificationTitle = payload.notification.title;
-  const notificationOptions = {
-    body: payload.notification.body,
-    icon: 'icon.png',
-    badge: 'icon.png',
-    data: payload.data
-  };
+  const { title, body } = payload.notification;
 
-  self.registration.showNotification(notificationTitle, notificationOptions);
-
-  self.clients.matchAll().then(clients => {
-    clients.forEach(client => {
-      client.postMessage({
-        type: 'NOTIFICATION_RECEIVED',
-        count: 1
-      });
-    });
+  self.registration.showNotification(title, {
+    body: body,
+    data: payload.data || {}
   });
 });
 
+// التعامل مع الضغط على النوتيفيكيشن
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
   const url = event.notification.data?.url || '/';
+
   event.waitUntil(
-    self.clients.matchAll({type: 'window'}).then(clients => {
-      if (clients.length > 0) {
-        return clients[0].focus();
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(clients => {
+      for (const client of clients) {
+        if (client.url.includes(url) && 'focus' in client) {
+          return client.focus();
+        }
       }
       return self.clients.openWindow(url);
     })
