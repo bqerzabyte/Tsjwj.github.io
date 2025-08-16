@@ -15,8 +15,16 @@ firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
-  console.log('Received background message: ', payload);
-  
+  const notificationTitle = payload.notification.title;
+  const notificationOptions = {
+    body: payload.notification.body,
+    icon: 'icon.png',
+    badge: 'icon.png',
+    data: payload.data
+  };
+
+  self.registration.showNotification(notificationTitle, notificationOptions);
+
   self.clients.matchAll().then(clients => {
     clients.forEach(client => {
       client.postMessage({
@@ -25,27 +33,17 @@ messaging.onBackgroundMessage((payload) => {
       });
     });
   });
-
-  if (Notification.permission === 'granted') {
-    const notificationTitle = payload.notification.title;
-    const notificationOptions = {
-      body: payload.notification.body,
-      icon: payload.notification.icon || 'icon.png',
-      badge: 'icon.png'
-    };
-
-    return self.registration.showNotification(notificationTitle, notificationOptions);
-  }
 });
 
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
+  const url = event.notification.data?.url || '/';
   event.waitUntil(
-    self.clients.matchAll({type: 'window'}).then(windowClients => {
-      if (windowClients.length > 0) {
-        return windowClients[0].focus();
+    self.clients.matchAll({type: 'window'}).then(clients => {
+      if (clients.length > 0) {
+        return clients[0].focus();
       }
-      return self.clients.openWindow('/');
+      return self.clients.openWindow(url);
     })
   );
 });
