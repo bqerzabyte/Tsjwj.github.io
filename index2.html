@@ -175,6 +175,16 @@
       color: #fffd44;
       padding: 20px;
     }
+    .loading-news:after {
+      content: '...';
+      animation: dots 1.5s steps(5, end) infinite;
+    }
+    @keyframes dots {
+      0%, 20% { content: '.'; }
+      40% { content: '..'; }
+      60% { content: '...'; }
+      80%, 100% { content: ''; }
+    }
   </style>
 </head>
 <body>
@@ -207,7 +217,10 @@
 </nav>
 
 <section class="section" id="foryou">
-  <div class="loading-news">جاري تحميل الأخبار...</div>
+  <div class="article">
+    <h3>أخبار بقرزلا</h3>
+    <p>جاري تحميل أحدث الأخبار...</p>
+  </div>
 </section>
 
 <footer>
@@ -216,13 +229,30 @@
 
 <script type="module">
 document.addEventListener('DOMContentLoaded', function() {
+  
   loadNews();
+  
   loadTawkTo();
+  
+  checkOnline();
+  
+  setupAutoRefresh();
 });
 
-async function loadNews() {
+async function loadNews(showLoading = true) {
   try {
-    const response = await fetch('foryou.html');
+    if (showLoading) {
+      document.querySelector('#foryou').innerHTML = 
+        '<div class="loading-news">جاري تحميل الأخبار...</div>';
+    }
+    
+    const response = await fetch(`foryou.html?t=${Date.now()}`, {
+      headers: {
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache'
+      }
+    });
+    
     if (!response.ok) throw new Error('Network response was not ok');
     
     const text = await response.text();
@@ -233,15 +263,38 @@ async function loadNews() {
     document.querySelector('#foryou').innerHTML = newsContent;
   } catch (error) {
     console.error('حدث خطأ في تحميل الأخبار:', error);
-    document.querySelector('#foryou').innerHTML = `
-      <div class="article">
-        <h3>حدث خطأ في تحميل الأخبار</h3>
-        <p>تعذر تحميل الأخبار. يرجى المحاولة لاحقاً أو التحقق من اتصال الإنترنت.</p>
-      </div>
-    `;
+    if (!document.querySelector('#foryou').innerHTML.includes('حدث خطأ')) {
+      document.querySelector('#foryou').innerHTML = `
+        <div class="article">
+          <h3>حدث خطأ في تحميل الأخبار</h3>
+          <p>تعذر تحميل الأخبار. يرجى المحاولة لاحقاً أو التحقق من اتصال الإنترنت.</p>
+        </div>
+      `;
+    }
   }
 }
+
+function setupAutoRefresh() {
+  let newsInterval;
   
+  function startInterval() {
+    newsInterval = setInterval(() => {
+      loadNews(false); // التحميل في الخلفية بدون عرض مؤشر التحميل
+    }, 90000); // 90 ثانية
+  }
+  
+  startInterval();
+  
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      clearInterval(newsInterval);
+    } else {
+      startInterval();
+      loadNews(false); // تحميل فوري عند العودة للصفحة
+    }
+  });
+}
+
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/firebase-messaging-sw.js')
@@ -324,14 +377,13 @@ function loadTawkTo() {
 function checkOnline() {
   if (!navigator.onLine) {
     document.getElementById('offlineMessage').style.display = 'block';
+  } else {
+    document.getElementById('offlineMessage').style.display = 'none';
   }
 }
 
-window.addEventListener('load', checkOnline);
 window.addEventListener('offline', checkOnline);
-window.addEventListener('online', () => {
-  document.getElementById('offlineMessage').style.display = 'none';
-});
+window.addEventListener('online', checkOnline);
 
 document.querySelectorAll('img').forEach(img => {
   img.addEventListener('contextmenu', e => e.preventDefault());
