@@ -14,7 +14,6 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
-// استقبال النوتيفيكيشن بالخلفية
 messaging.onBackgroundMessage((payload) => {
   const { title, body } = payload.notification;
 
@@ -24,7 +23,6 @@ messaging.onBackgroundMessage((payload) => {
   });
 });
 
-// التعامل مع الضغط على النوتيفيكيشن
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
   const url = event.notification.data?.url || '/';
