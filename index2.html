@@ -184,6 +184,14 @@
     #installBtn:hover {
       background-color: #e6e400;
     }
+    .notification-style {
+      background-color: #1b4242;
+      color: #cdeed6;
+      border: 2px solid #4fbdbaff;
+      border-radius: 12px;
+      padding: 15px;
+      box-shadow: 0 0 15px #4fbdbaff88;
+    }
   </style>
 </head>
 <body>
@@ -205,7 +213,7 @@
   <a href="ta2es.html">الطقس</a>
   <a href="contactus.html">تواصل معنا</a>
   <a href="downloadapp.html">حمّل التطبيق</a>
-  <a id="iosNotificationBtn" href="#" style="display: none;">تفعيل الإشعارات</a>
+  <a id="iosNotificationBtn" href="#" style="display: none;">الإشعارات للأيفون</a>
   <a id="installBtn" href="#" style="display: none;">إضافة إلى الشاشة الرئيسية</a>
   <form id="googleSearchForm" onsubmit="return doGoogleSearch(event)" role="search" aria-label="بحث جوجل في بقرزلا">
     <input type="text" id="searchInput" placeholder="ابحث في جوجل عن بقرزلا" aria-label="بحث في جوجل" />
@@ -236,12 +244,16 @@ document.addEventListener('DOMContentLoaded', function() {
   
   if (isIOS) {
     const iosNotificationBtn = document.getElementById('iosNotificationBtn');
-    iosNotificationBtn.style.display = 'inline-block';
-    iosNotificationBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-      requestNotificationPermission();
-    });
-  } else if (isAndroid) {
+    if (Notification.permission === 'default') {
+      iosNotificationBtn.style.display = 'inline-block';
+      iosNotificationBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        requestNotificationPermission();
+      });
+    } else if (Notification.permission === 'granted') {
+      iosNotificationBtn.style.display = 'none';
+    }
+  } else if (isAndroid && Notification.permission === 'default') {
     requestNotificationPermission().catch(() => {});
   }
   
@@ -278,6 +290,11 @@ window.addEventListener('focus', function() {
 
 async function requestNotificationPermission() {
   try {
+    if (Notification.permission === 'granted') {
+      document.getElementById('iosNotificationBtn').style.display = 'none';
+      return;
+    }
+    
     const permission = await Notification.requestPermission();
     if (permission === 'granted') {
       document.getElementById('iosNotificationBtn').style.display = 'none';
@@ -379,13 +396,33 @@ onMessage(messaging, (payload) => {
   if (Notification.permission === 'granted') {
     const notification = new Notification(payload.notification.title, {
       body: payload.notification.body,
-      icon: payload.notification.icon || 'icon.png'
+      icon: payload.notification.icon || 'icon.png',
+      badge: 'icon.png',
+      tag: 'bqerzala-notification',
+      data: { url: payload.data?.url || '/' }
     });
-    notification.onclick = () => {
+    
+    notification.addEventListener('click', (event) => {
+      event.preventDefault();
       unreadNotifications = 0;
       updateBadge();
       window.focus();
-    };
+      if (event.target.data?.url) {
+        window.location.href = event.target.data.url;
+      }
+    });
+    
+    const style = document.createElement('style');
+    style.textContent = `
+      .notification-style {
+        background-color: #1b4242;
+        color: #cdeed6;
+        border: 2px solid #4fbdbaff;
+        border-radius: 12px;
+        padding: 15px;
+      }
+    `;
+    document.head.appendChild(style);
   }
 });
 
