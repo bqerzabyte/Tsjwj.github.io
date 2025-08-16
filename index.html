@@ -23,7 +23,7 @@
       justify-content: center;
       position: relative;
     }
-    header img {
+    header img.left-logo {
       height: 60px;
       width: auto;
       position: absolute;
@@ -37,8 +37,12 @@
       user-select: none;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       margin-left: 20px;
+    }
+    header h1 img {
+      height: 40px;
+      width: auto;
     }
     nav {
       background-color: #142f2f;
@@ -180,8 +184,12 @@
 <div id="offlineMessage">لا يوجد اتصال بالإنترنت. الرجاء التحقق من الشبكة.</div>
 
 <header>
-  <img src="https://cdn.glitch.global/01ad90b5-5958-4808-868b-6607b1facd24/Logo%20website%20bqerzala.9.png?v=1750385967410" alt="شعار بقرزلا" />
-  <h1 style="margin-left:20px;">الموقع الرسمي</h1>
+  <img class="left-logo" src="https://cdn.glitch.global/01ad90b5-5958-4808-868b-6607b1facd24/Logo%20website%20bqerzala.9.png?v=1750385967410" alt="شعار بقرزلا"/>
+  <h1>
+    <img src="https://cdn.glitch.global/01ad90b5-5958-4808-868b-6607b1facd24/Logo%20website%20bqerzala.9.png?v=1750385967410" alt="شعار قبل الموقع"/>
+    الموقع الرسمي
+    <img src="https://cdn.glitch.global/01ad90b5-5958-4808-868b-6607b1facd24/Logo%20website%20bqerzala.9.png?v=1750385967410" alt="شعار بعد الموقع"/>
+  </h1>
 </header>
 
 <nav>
@@ -274,6 +282,7 @@ function checkOnline() {
 window.addEventListener('load', checkOnline);
 window.addEventListener('offline', checkOnline);
 
+// منع النسخ والضغط على الصور
 document.querySelectorAll('img').forEach(img => {
   img.addEventListener('contextmenu', e => e.preventDefault());
   img.addEventListener('click', e => {
@@ -282,6 +291,7 @@ document.querySelectorAll('img').forEach(img => {
   });
 });
 
+// بحث جوجل
 function doGoogleSearch(e) {
   e.preventDefault();
   const query = document.getElementById('searchInput').value.trim();
@@ -292,6 +302,7 @@ function doGoogleSearch(e) {
   return false;
 }
 
+// Tawk.to للدردشة المباشرة
 var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
 (function(){
   var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
