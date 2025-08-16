@@ -1,1 +1,248 @@
-<!DOCTYPE html><html lang="ar" dir="rtl"><head>  <meta charset="UTF-8" />  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">  <title>الموقع الرسمي بقرزلا</title>  <link rel="apple-touch-icon" sizes="180x180" href="/icon.png">  <meta name="apple-mobile-web-app-title" content="bqerzala">  <style>    body {      background-color: #121212;      color: #eee;      font-family: 'Quicksand', sans-serif, Tahoma, sans-serif;      margin: 0;      padding: 0;      overflow-x: hidden;    }    html {      overflow-x: hidden;    }    header {      background-color: #1b4242;      padding: 12px 20px;      display: flex;      align-items: center;      border-bottom: 2px solid #4fbdbaff;      justify-content: center;      position: relative;    }    header h1 {      font-weight: 700;      font-size: 1.8rem;      color: #cdeed6;      margin: 0;      user-select: none;      display: flex;      align-items: center;      gap: 10px;    }    header h1 img {      height: 60px;      width: auto;    }    nav {      background-color: #142f2f;      display: flex;      flex-wrap: wrap;      justify-content: center;      gap: 8px;      padding: 12px 10px;      align-items: center;    }    nav a {      display: inline-block;      font-size: 0.75rem;      padding: 4px 10px;      color: #cdeed6;      font-weight: 600;      text-decoration: none;      border: 2px solid #4fbdbaff;      border-radius: 8px;      cursor: pointer;      transition: background-color 0.3s ease, color 0.3s ease;      white-space: nowrap;    }    nav a:hover {      background-color: #4fbdbaff;      color: #121212;    }    nav form {      display: flex;      border: 2px solid #4fbdbaff;      border-radius: 8px;      overflow: hidden;      background-color: #1b4242;      align-items: center;      gap: 5px;      flex: 0 0 100%;      margin-top: 8px;    }    nav form input[type="text"] {      border: none;      background: transparent;      padding: 8px 12px;      font-size: 1rem;      color: #cdeed6;      outline: none;      width: 100%;    }    nav form button {      background-color: transparent;      border: none;      color: #cdeed6;      cursor: pointer;      padding: 8px 12px;      font-size: 1.3rem;      transition: color 0.3s ease;    }    nav form button:hover {      color: #fffd44;    }    nav form svg {      width: 22px;      height: 22px;      fill: currentColor;    }    .section {      max-width: 720px;      margin: 30px auto;      color: #e0f2f1;    }    .article {      background-color: #1b4242;      border-radius: 12px;      padding: 20px 30px;      box-shadow: 0 0 15px #4fbdbaff88;      margin-bottom: 2.5rem;    }    .article h3 {      margin-top: 0;      font-weight: 700;      font-size: 1.6rem;      color: #fffd44;      user-select: text;    }    .article time {      font-size: 0.9rem;      color: #a0c8c8;      user-select: text;    }    .article p {      margin-top: 12px;      line-height: 1.6;      user-select: text;    }    .article img {      margin-top: 20px;      width: 100%;      border-radius: 10px;      border: 3px solid #4fbdbaff;      user-select: none;    }    footer {      background-color: #142f2f;      border-top: 1px solid #2b5959;      padding: 18px 10px 10px 10px;      color: #83b2ad;      font-size: 0.9rem;      user-select: none;      text-align: center;      display: flex;      flex-direction: column;      align-items: center;      gap: 6px;    }    #offlineMessage {      display: none;      text-align: center;      margin-top: 50px;      color: #fffd44;      font-size: 1.2rem;    }    .loading-news {      text-align: center;      color: #fffd44;      padding: 20px;    }        #notificationPermissionModal {      position: fixed;      top: 0;      left: 0;      width: 100%;      height: 100%;      background-color: rgba(0,0,0,0.9);      z-index: 10000;      display: flex;      justify-content: center;      align-items: center;      flex-direction: column;      color: #cdeed6;      text-align: center;      padding: 20px;      box-sizing: border-box;    }        #notificationPermissionModal h2 {      color: #fffd44;      font-size: 1.8rem;      margin-bottom: 20px;    }        #notificationPermissionModal p {      font-size: 1.2rem;      margin-bottom: 30px;      max-width: 500px;    }        #allowNotificationsBtn {      background-color: #4fbdbaff;      color: #121212;      border: none;      padding: 12px 30px;      font-size: 1.2rem;      border-radius: 8px;      cursor: pointer;      font-weight: bold;      transition: background-color 0.3s;    }        #allowNotificationsBtn:hover {      background-color: #3da8a8;    }  </style></head><body><div id="notificationPermissionModal" style="display: none;">  <h2>تفعيل الإشعارات</h2>  <p>للاستفادة من جميع ميزات الموقع، يرجى السماح بتلقي الإشعارات</p>  <button id="allowNotificationsBtn">السماح بالإشعارات</button></div><div id="offlineMessage">لا يوجد اتصال بالإنترنت. الرجاء التحقق من الشبكة.</div><header>  <h1>    <img src="https://cdn.glitch.global/01ad90b5-5958-4808-868b-6607b1facd24/Logo%20website%20bqerzala.9.png?v=1750385967410" alt="شعار قبل الموقع" />    الموقع الرسمي    <img src="https://cdn.glitch.global/01ad90b5-5958-4808-868b-6607b1facd24/Logo%20website%20bqerzala.9.png?v=1750385967410" alt="شعار بعد الموقع" />  </h1></header><nav>  <a href="mo2asasat.html">مؤسسات</a>  <a href="daleelnumbers.html">أرقام</a>  <a href="3dview.html">satellite view</a>  <a href="ta2es.html">الطقس</a>  <a href="contactus.html">تواصل معنا</a>  <a href="downloadapp.html">حمّل التطبيق</a>  <form id="googleSearchForm" onsubmit="return doGoogleSearch(event)" role="search" aria-label="بحث جوجل في بقرزلا">    <input type="text" id="searchInput" placeholder="ابحث في جوجل عن بقرزلا" aria-label="بحث في جوجل" />    <button type="submit" aria-label="زر البحث">      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">        <path d="M21.71 20.29l-3.388-3.388A7.945 7.945 0 0016 10a8 8 0 10-8 8 7.945 7.945 0 006.902-4.678l3.388 3.388a1 1 0 001.42-1.42zM4 10a6 6 0 1112 0 6 6 0 01-12 0z" />      </svg>    </button>  </form></nav><section class="section" id="foryou">  <div class="loading-news">جاري تحميل الأخبار...</div></section><footer>  &copy; 2025 بقرزلا - الموقع الرسمي | جميع الحقوق محفوظة</footer><script type="module">document.addEventListener('DOMContentLoaded', function() {  showNotificationPermissionModal();  loadNews();});function showNotificationPermissionModal() {  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);  if (!isIOS && Notification.permission === 'default') {    document.getElementById('notificationPermissionModal').style.display = 'flex';  }}document.getElementById('allowNotificationsBtn').addEventListener('click', async function() {  try {    const permission = await Notification.requestPermission();    if (permission === 'granted') {      document.getElementById('notificationPermissionModal').style.display = 'none';            if ('serviceWorker' in navigator && 'PushManager' in window) {        const registration = await navigator.serviceWorker.ready;        const subscription = await registration.pushManager.subscribe({          userVisibleOnly: true,          applicationServerKey: 'BJY1HhXvT8V4AYQ97Legi5zSbRNq4WhXcKw_ikSXjYGa7jmzanXwYpxp5tylGlFTjhc6LtY7PUUg5wXhjkF3dRM'        });                await fetch('https://yourserver.com/save-subscription', {          method: 'POST',          headers: {            'Content-Type': 'application/json',          },          body: JSON.stringify(subscription),        });      }    }  } catch (error) {    console.error("Error requesting notification permission:", error);  }});async function loadNews() {  try {    const response = await fetch('foryou.html');    if (!response.ok) throw new Error('Network response was not ok');        const text = await response.text();    const parser = new DOMParser();    const doc = parser.parseFromString(text, 'text/html');    const newsContent = doc.querySelector('#foryou').innerHTML;        document.querySelector('#foryou').innerHTML = newsContent;  } catch (error) {    console.error('حدث خطأ في تحميل الأخبار:', error);    document.querySelector('#foryou').innerHTML = `      <div class="article">        <h3>حدث خطأ في تحميل الأخبار</h3>        <p>تعذر تحميل الأخبار. يرجى المحاولة لاحقاً أو التحقق من اتصال الإنترنت.</p>      </div>    `;  }}if ('serviceWorker' in navigator) {  window.addEventListener('load', () => {    navigator.serviceWorker.register('/firebase-messaging-sw.js')      .then(registration => {        console.log('ServiceWorker registration successful');      }).catch(err => {        console.log('ServiceWorker registration failed: ', err);      });  });}import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-messaging.js";const firebaseConfig = {  apiKey: "AIzaSyC2wTp0Afn_XmWCKhk1Bx3o13imBc1zIUc",  authDomain: "bqerzala-ae4d8.firebaseapp.com",  projectId: "bqerzala-ae4d8",  storageBucket: "bqerzala-ae4d8.appspot.com",  messagingSenderId: "912894745948",  appId: "1:912894745948:web:773493f7afdd4866d03599",  measurementId: "G-1NMXR2DFYN"};const app = initializeApp(firebaseConfig);const messaging = getMessaging(app);onMessage(messaging, (payload) => {  console.log('Message received', payload);    if (Notification.permission === 'granted') {    const notification = new Notification(payload.notification.title, {      body: payload.notification.body,      icon: payload.notification.icon    });        notification.onclick = () => {      window.focus();    };  }});function loadTawkTo() {  var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();  (function(){    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];    s1.async=true;    s1.src='https://embed.tawk.to/687db1a05d615919175d8226/1j0lfrnej';    s1.charset='UTF-8';    s1.setAttribute('crossorigin','*');    s0.parentNode.insertBefore(s1,s0);  })();}function checkOnline() {  if (!navigator.onLine) {    document.getElementById('offlineMessage').style.display = 'block';  }}window.addEventListener('load', checkOnline);window.addEventListener('offline', checkOnline);window.addEventListener('online', () => {  document.getElementById('offlineMessage').style.display = 'none';});document.querySelectorAll('img').forEach(img => {  img.addEventListener('contextmenu', e => e.preventDefault());  img.addEventListener('click', e => {    e.preventDefault();    alert('هذه الصورة محمية بحقوق النشر ومخصصة للعرض حصراً على موقعنا الرسمي.');  });});function doGoogleSearch(e) {  e.preventDefault();  const query = document.getElementById('searchInput').value.trim();  if (!query) return false;  const finalQuery = encodeURIComponent(query + " في بقرزلا في عكار");  const url = "https://www.google.com/search?q=" + finalQuery;  window.open(url, '_blank');  return false;}</script></body></html>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>أخبار بقرزلا</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: #eee;
+      font-family: 'Quicksand', sans-serif, Tahoma, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+    .section {
+      max-width: 720px;
+      margin: 0 auto;
+      color: #e0f2f1;
+    }
+    .article {
+      background-color: #1b4242;
+      border-radius: 12px;
+      padding: 20px 30px;
+      box-shadow: 0 0 15px #4fbdbaff88;
+      margin-bottom: 2.5rem;
+    }
+    .article h3 {
+      margin-top: 0;
+      font-weight: 700;
+      font-size: 1.6rem;
+      color: #fffd44;
+    }
+    .article time {
+      font-size: 0.9rem;
+      color: #a0c8c8;
+    }
+    .article p {
+      margin-top: 12px;
+      line-height: 1.6;
+    }
+    .article img {
+      margin-top: 20px;
+      width: 100%;
+      border-radius: 10px;
+      border: 3px solid #4fbdbaff;
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+    }
+    .article img:active {
+      opacity: 0.8;
+    }
+    h2 {
+      color: #cdeed6;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .alert-box {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #1b4242;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      border: 2px solid #fffd44;
+      z-index: 1000;
+      max-width: 80%;
+      text-align: center;
+      display: none;
+    }
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0,0,0,0.7);
+      z-index: 999;
+      display: none;
+    }
+    .permission-bar {
+      background-color: #1b4242;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid #4fbdbaff;
+    }
+    .permission-text {
+      font-size: 0.9rem;
+    }
+    .enable-btn {
+      background-color: #4fbdbaff;
+      color: #121212;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .enable-btn:hover {
+      background-color: #3da4a8;
+    }
+    .top-links {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .top-links a {
+      color: #cdeed6;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .top-links a:hover {
+      color: #fffd44;
+    }
+    .notification-icon {
+      font-size: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+
+<div class="overlay" id="overlay"></div>
+<div class="alert-box" id="alertBox">
+  <h3>تنبيه!</h3>
+  <p>هذه الصورة محمية بحقوق نشر للموقع، يمكنك مشاهدتها هنا فقط!</p>
+  <p>ممنوع حفظها أو استخدامها دون إذن.</p>
+  <button onclick="closeAlert()" class="enable-btn">حسناً</button>
+</div>
+
+<div class="permission-bar" id="permissionBar">
+  <div class="permission-text">لتصفح الموقع بشكل كامل، يرجى تفعيل الإشعارات</div>
+  <button class="enable-btn" onclick="requestNotificationPermission()">تفعيل الإشعارات</button>
+</div>
+
+<div class="top-links">
+  <a href="#">مؤسسات</a>
+  <a href="#">أرقام</a>
+  <a href="#" onclick="requestNotificationPermission(); return false;">
+    <span class="notification-icon">🔔</span> تفعيل الإشعارات
+  </a>
+  <a href="#">اتصل بنا</a>
+</div>
+
+<section class="section" id="foryou">
+  <h2>أخبار بقرزلا</h2>
+  <article class="article">
+    <h3>patrickdi701</h3>
+    <time datetime="2025-06-13T09:00">13 حزيران 2025 - 09:00 صباحاً</time>
+    <p>ضمن جهود تعزيز الوعي البيئي في بقرزلا، قام باتريك ديب بتنظيم حملة تنظيف وتجميل بمشاركة واسعة من أهالي القرية، هدفها تحسين البيئة المحلية وزرع ثقافة الحفاظ على الطبيعة.</p>
+    <img src="https://cdn.glitch.global/01ad90b5-5958-4808-868b-6607b1facd24/FB_IMG_1749772479214.jpg?v=1749783772491" alt="باتريك ديب في حملة بيئية" onclick="showAlert()" oncontextmenu="return false;" />
+  </article>
+  
+  <article class="article">
+    <h3>افتتاح معرض فني لأعمال شباب بقرزلا</h3>
+    <time datetime="2025-06-12T18:30">12 حزيران 2025 - 06:30 مساءً</time>
+    <p>استضافت قاعة البلدية معرضاً فنياً مميزاً يعرض أعمال الشباب الموهوبين من بقرزلا، حيث شهد المعرض إقبالاً كبيراً وتفاعلًا من المجتمع المحلي.</p>
+    <img src="https://cdn.glitch.global/01ad90b5-5958-4808-868b-6607b1facd24/art-exhibit.jpg?v=1749783772491" alt="معرض فني في بقرزلا" onclick="showAlert()" oncontextmenu="return false;" />
+  </article>
+  
+  <article class="article">
+    <h3>akhbar b2arzala</h3>
+    <time datetime="2025-06-13T09:00">13 حزيران 2025 - 09:00 صباحاً</time>
+    <p>ta lmal3ab lbalade football</p>
+    <img src="https://raw.githubusercontent.com/elieahmar2/Bqerzala-pics-and-icons/refs/heads/main/photo.jpg.webp" alt="الملعب البلدي في بقرزلا" onclick="showAlert()" oncontextmenu="return false;" />
+  </article>
+</section>
+
+<script>
+  function checkNotificationPermission() {
+    if (Notification.permission === 'granted') {
+      document.getElementById('permissionBar').style.display = 'none';
+    } else {
+      document.getElementById('permissionBar').style.display = 'flex';
+      
+      if (/Android/i.test(navigator.userAgent)) {
+        requestNotificationPermission();
+      }
+    }
+  }
+  
+  function requestNotificationPermission() {
+    Notification.requestPermission().then(function(permission) {
+      if (permission === 'granted') {
+        document.getElementById('permissionBar').style.display = 'none';
+        
+        new Notification('شكراً لتفعيل الإشعارات', {
+          body: 'ستصلك آخر الأخبار والتحديثات من بقرزلا',
+          icon: 'https://cdn.glitch.global/01ad90b5-5958-4808-868b-6607b1facd24/photo.jpg.webp'
+        });
+      } else {
+        alert('لن تتمكن من استلام الإشعارات المهمة بدون تفعيل الصلاحية');
+      }
+    });
+  }
+  
+  function showAlert() {
+    document.getElementById('overlay').style.display = 'block';
+    document.getElementById('alertBox').style.display = 'block';
+  }
+  
+  function closeAlert() {
+    document.getElementById('overlay').style.display = 'none';
+    document.getElementById('alertBox').style.display = 'none';
+  }
+  
+  document.addEventListener('DOMContentLoaded', function() {
+    checkNotificationPermission();
+    
+    const images = document.querySelectorAll('.article img');
+    images.forEach(img => {
+      img.addEventListener('mousedown', function(e) {
+        if (e.button === 0) {
+          setTimeout(() => {
+            if (e.target === img) {
+              showAlert();
+            }
+          }, 800);
+        }
+        return false;
+      });
+      
+      img.addEventListener('mouseup', function(e) {
+        if (e.target === img && e.button === 0) {
+          const mouseUpTime = new Date().getTime();
+          const mouseDownTime = parseInt(img.getAttribute('data-mousedown-time') || '0');
+          if (mouseUpTime - mouseDownTime > 800) {
+            showAlert();
+          }
+        }
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
