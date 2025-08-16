@@ -82,50 +82,19 @@
       z-index: 999;
       display: none;
     }
-    .permission-bar {
-      background-color: #1b4242;
-      padding: 15px;
-      border-radius: 8px;
-      margin-bottom: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border: 1px solid #4fbdbaff;
+    nav {
+      text-align: center;
+      margin: 20px 0;
     }
-    .permission-text {
-      font-size: 0.9rem;
-    }
-    .enable-btn {
-      background-color: #4fbdbaff;
-      color: #121212;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    .enable-btn:hover {
-      background-color: #3da4a8;
-    }
-    .top-links {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-    }
-    .top-links a {
+    nav a {
       color: #cdeed6;
       text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 5px;
+      margin: 0 10px;
     }
-    .top-links a:hover {
+    .notification-link {
       color: #fffd44;
-    }
-    .notification-icon {
-      font-size: 1.2rem;
+      text-decoration: none;
+      margin-right: 10px;
     }
   </style>
 </head>
@@ -136,22 +105,18 @@
   <h3>تنبيه!</h3>
   <p>هذه الصورة محمية بحقوق نشر للموقع، يمكنك مشاهدتها هنا فقط!</p>
   <p>ممنوع حفظها أو استخدامها دون إذن.</p>
-  <button onclick="closeAlert()" class="enable-btn">حسناً</button>
+  <button onclick="closeAlert()" style="background-color: #4fbdbaff; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer;">حسناً</button>
 </div>
 
-<div class="permission-bar" id="permissionBar">
-  <div class="permission-text">لتصفح الموقع بشكل كامل، يرجى تفعيل الإشعارات</div>
-  <button class="enable-btn" onclick="requestNotificationPermission()">تفعيل الإشعارات</button>
-</div>
-
-<div class="top-links">
-  <a href="#">مؤسسات</a>
-  <a href="#">أرقام</a>
-  <a href="#" onclick="requestNotificationPermission(); return false;">
-    <span class="notification-icon">🔔</span> تفعيل الإشعارات
-  </a>
-  <a href="#">اتصل بنا</a>
-</div>
+<nav>
+  <a href="mo2asasat.html">مؤسسات</a>
+  <a href="daleelnumbers.html">أرقام</a>
+  <a href="3dview.html">satellite view</a>
+  <a href="ta2es.html">الطقس</a>
+  <a href="contactus.html">تواصل معنا</a>
+  <a href="downloadapp.html">حمّل التطبيق</a>
+  <a href="#" class="notification-link" onclick="requestNotificationPermission()">🔔 اشعارات</a>
+</nav>
 
 <section class="section" id="foryou">
   <h2>أخبار بقرزلا</h2>
@@ -178,33 +143,6 @@
 </section>
 
 <script>
-  function checkNotificationPermission() {
-    if (Notification.permission === 'granted') {
-      document.getElementById('permissionBar').style.display = 'none';
-    } else {
-      document.getElementById('permissionBar').style.display = 'flex';
-      
-      if (/Android/i.test(navigator.userAgent)) {
-        requestNotificationPermission();
-      }
-    }
-  }
-  
-  function requestNotificationPermission() {
-    Notification.requestPermission().then(function(permission) {
-      if (permission === 'granted') {
-        document.getElementById('permissionBar').style.display = 'none';
-        
-        new Notification('شكراً لتفعيل الإشعارات', {
-          body: 'ستصلك آخر الأخبار والتحديثات من بقرزلا',
-          icon: 'https://cdn.glitch.global/01ad90b5-5958-4808-868b-6607b1facd24/photo.jpg.webp'
-        });
-      } else {
-        alert('لن تتمكن من استلام الإشعارات المهمة بدون تفعيل الصلاحية');
-      }
-    });
-  }
-  
   function showAlert() {
     document.getElementById('overlay').style.display = 'block';
     document.getElementById('alertBox').style.display = 'block';
@@ -215,9 +153,29 @@
     document.getElementById('alertBox').style.display = 'none';
   }
   
+  function requestNotificationPermission() {
+    if (/Android/i.test(navigator.userAgent)) {
+      Notification.requestPermission().then(function(permission) {
+        if (permission === 'granted') {
+          new Notification('شكراً لتفعيل الإشعارات', {
+            body: 'ستصلك آخر الأخبار من بقرزلا',
+            icon: 'https://cdn.glitch.global/01ad90b5-5958-4808-868b-6607b1facd24/photo.jpg.webp'
+          });
+        }
+      });
+    } else if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+      alert('لتفعيل الإشعارات على iOS، يرجى الضغط على "السماح" عند ظهور الطلب');
+      Notification.requestPermission();
+    } else {
+      Notification.requestPermission();
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', function() {
-    checkNotificationPermission();
-    
+    if (/Android/i.test(navigator.userAgent)) {
+      requestNotificationPermission();
+    }
+
     const images = document.querySelectorAll('.article img');
     images.forEach(img => {
       img.addEventListener('mousedown', function(e) {
