@@ -43,15 +43,56 @@
       width: 100%;
       border-radius: 10px;
       border: 3px solid #4fbdbaff;
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+    }
+    .article img:active {
+      opacity: 0.8;
     }
     h2 {
       color: #cdeed6;
       text-align: center;
       margin-bottom: 30px;
     }
+    .alert-box {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #1b4242;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      border: 2px solid #fffd44;
+      z-index: 1000;
+      max-width: 80%;
+      text-align: center;
+      display: none;
+    }
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0,0,0,0.7);
+      z-index: 999;
+      display: none;
+    }
   </style>
 </head>
 <body>
+
+<div class="overlay" id="overlay"></div>
+<div class="alert-box" id="alertBox">
+  <h3>تنبيه!</h3>
+  <p>هذه الصورة محمية بحقوق نشر للموقع، يمكنك مشاهدتها هنا فقط!</p>
+  <p>ممنوع حفظها أو استخدامها دون إذن.</p>
+  <button onclick="closeAlert()" style="background-color: #4fbdbaff; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer;">حسناً</button>
+</div>
 
 <section class="section" id="foryou">
   <h2>أخبار بقرزلا</h2>
@@ -59,30 +100,67 @@
     <h3>patrickdi701</h3>
     <time datetime="2025-06-13T09:00">13 حزيران 2025 - 09:00 صباحاً</time>
     <p>ضمن جهود تعزيز الوعي البيئي في بقرزلا، قام باتريك ديب بتنظيم حملة تنظيف وتجميل بمشاركة واسعة من أهالي القرية، هدفها تحسين البيئة المحلية وزرع ثقافة الحفاظ على الطبيعة.</p>
-    <img src="https://cdn.glitch.global/01ad90b5-5958-4808-868b-6607b1facd24/FB_IMG_1749772479214.jpg?v=1749783772491" alt="باتريك ديب في حملة بيئية" />
+    <img src="https://cdn.glitch.global/01ad90b5-5958-4808-868b-6607b1facd24/FB_IMG_1749772479214.jpg?v=1749783772491" alt="باتريك ديب في حملة بيئية" onclick="showAlert()" oncontextmenu="return false;" />
   </article>
-  
-  
+
+
   
   <article class="article">
     <h3>افتتاح معرض فني لأعمال شباب بقرزلا</h3>
     <time datetime="2025-06-12T18:30">12 حزيران 2025 - 06:30 مساءً</time>
     <p>استضافت قاعة البلدية معرضاً فنياً مميزاً يعرض أعمال الشباب الموهوبين من بقرزلا، حيث شهد المعرض إقبالاً كبيراً وتفاعلًا من المجتمع المحلي.</p>
-    <img src="https://cdn.glitch.global/01ad90b5-5958-4808-868b-6607b1facd24/art-exhibit.jpg?v=1749783772491" alt="معرض فني في بقرزلا" />
+    <img src="https://cdn.glitch.global/01ad90b5-5958-4808-868b-6607b1facd24/art-exhibit.jpg?v=1749783772491" alt="معرض فني في بقرزلا" onclick="showAlert()" oncontextmenu="return false;" />
   </article>
-  
-  
+
+
   
   <article class="article">
     <h3>akhbar b2arzala</h3>
     <time datetime="2025-06-13T09:00">13 حزيران 2025 - 09:00 صباحاً</time>
     <p>ta lmal3ab lbalade football</p>
-    <img src="https://raw.githubusercontent.com/elieahmar2/Bqerzala-pics-and-icons/refs/heads/main/photo.jpg.webp" alt="الملعب البلدي في بقرزلا"/>
+    <img src="https://raw.githubusercontent.com/elieahmar2/Bqerzala-pics-and-icons/refs/heads/main/photo.jpg.webp" alt="الملعب البلدي في بقرزلا" onclick="showAlert()" oncontextmenu="return false;" />
   </article>
-  
-  
-  
 </section>
+
+
+  
+<script>
+  function showAlert() {
+    document.getElementById('overlay').style.display = 'block';
+    document.getElementById('alertBox').style.display = 'block';
+  }
+  
+  function closeAlert() {
+    document.getElementById('overlay').style.display = 'none';
+    document.getElementById('alertBox').style.display = 'none';
+  }
+  
+  document.addEventListener('DOMContentLoaded', function() {
+    const images = document.querySelectorAll('.article img');
+    images.forEach(img => {
+      img.addEventListener('mousedown', function(e) {
+        if (e.button === 0) {
+          setTimeout(() => {
+            if (e.target === img) {
+              showAlert();
+            }
+          }, 800);
+        }
+        return false;
+      });
+      
+      img.addEventListener('mouseup', function(e) {
+        if (e.target === img && e.button === 0) {
+          const mouseUpTime = new Date().getTime();
+          const mouseDownTime = parseInt(img.getAttribute('data-mousedown-time') || '0');
+          if (mouseUpTime - mouseDownTime > 800) {
+            showAlert();
+          }
+        }
+      });
+    });
+  });
+</script>
 
 </body>
 </html>
