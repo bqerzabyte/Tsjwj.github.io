@@ -37,14 +37,6 @@
       align-items: center;
       gap: 8px;
     }
-    #enableNotifications {
-      font-size: 0.8rem;
-      color: #4fbdbaff;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 3px;
-    }
     nav {
       background-color: #142f2f;
       display: flex;
@@ -52,6 +44,7 @@
       justify-content: center;
       gap: 8px;
       padding: 12px 10px;
+      align-items: center;
     }
     nav a {
       display: inline-block;
@@ -65,10 +58,22 @@
       cursor: pointer;
       transition: background-color 0.3s ease, color 0.3s ease;
       white-space: nowrap;
-      min-width: 0;
-      max-width: none;
     }
     nav a:hover {
+      background-color: #4fbdbaff;
+      color: #121212;
+    }
+    #enableNotifications {
+      font-size: 0.75rem;
+      color: #4fbdbaff;
+      cursor: pointer;
+      padding: 4px 10px;
+      border: 2px solid #4fbdbaff;
+      border-radius: 8px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      white-space: nowrap;
+    }
+    #enableNotifications:hover {
       background-color: #4fbdbaff;
       color: #121212;
     }
@@ -173,12 +178,7 @@
 
 <header>
   <img src="https://cdn.glitch.global/01ad90b5-5958-4808-868b-6607b1facd24/Logo%20website%20bqerzala.9.png?v=1750385967410" alt="شعار بقرزلا" />
-  <h1>
-    الموقع الرسمي
-    <span id="enableNotifications" title="تفعيل الإشعارات">
-      تفعيل الإشعارات
-    </span>
-  </h1>
+  <h1>الموقع الرسمي</h1>
 </header>
 
 <nav>
@@ -188,6 +188,7 @@
   <a href="ta2es.html">الطقس</a>
   <a href="contactus.html">تواصل معنا</a>
   <a href="downloadapp.html">حمّل التطبيق</a>
+  <span id="enableNotifications" title="تفعيل الإشعارات">تفعيل الإشعارات</span>
   <form id="googleSearchForm" onsubmit="return doGoogleSearch(event)" role="search" aria-label="بحث جوجل في بقرزلا">
     <input type="text" id="searchInput" placeholder="ابحث في جوجل عن بقرزلا" aria-label="بحث في جوجل" />
     <button type="submit" aria-label="زر البحث">
@@ -241,14 +242,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const messaging = getMessaging(app);
 
-// إخفاء زر الإشعارات في WebView
-const isWebView = /(WebView|wv)/i.test(navigator.userAgent);
-if (isWebView) {
-  document.getElementById('enableNotifications').style.display = 'none';
-}
-
-// تفعيل الإشعارات عند الضغط على الزر
-document.getElementById('enableNotifications').addEventListener('click', () => {
+const enableBtn = document.getElementById('enableNotifications');
+enableBtn.addEventListener('click', () => {
   const confirmEnable = confirm("هل تريد تفعيل الإشعارات ليصلك كل جديد عن بقرزلا؟");
   if (confirmEnable) {
     Notification.requestPermission().then(permission => {
@@ -257,23 +252,18 @@ document.getElementById('enableNotifications').addEventListener('click', () => {
           .then(currentToken => {
             if (currentToken) {
               alert("تم! شكراً لأنك مهتم بالإشعارات.");
-              document.getElementById('enableNotifications').style.display = 'none';
+              enableBtn.style.display = 'none';
             }
           });
       } else {
         alert("عذراً، لم يتم تفعيل الإشعارات.");
       }
     });
-  } else {
-    // يظل الزر موجودًا إذا رفض الإشعارات
-    alert("يؤسفنا ذلك! يمكنك تفعيل الإشعارات لاحقاً.");
   }
 });
 
-// فحص الإنترنت عند التحميل وأثناء التصفح
 function checkOnline() {
   if (!navigator.onLine) {
-    // إخفاء الصفحة الحالية وإظهار رسالة offline
     document.body.innerHTML = '<div style="text-align:center;margin-top:50px;color:#fffd44;font-size:1.2rem;">لا يوجد اتصال بالإنترنت. الرجاء التحقق من الشبكة.</div>';
   }
 }
@@ -281,7 +271,6 @@ function checkOnline() {
 window.addEventListener('load', checkOnline);
 window.addEventListener('offline', checkOnline);
 
-// منع النسخ والضغط على الصور
 document.querySelectorAll('img').forEach(img => {
   img.addEventListener('contextmenu', e => e.preventDefault());
   img.addEventListener('click', e => {
@@ -290,7 +279,6 @@ document.querySelectorAll('img').forEach(img => {
   });
 });
 
-// بحث جوجل
 function doGoogleSearch(e) {
   e.preventDefault();
   const query = document.getElementById('searchInput').value.trim();
@@ -301,7 +289,6 @@ function doGoogleSearch(e) {
   return false;
 }
 
-// Tawk.to للدردشة المباشرة
 var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
 (function(){
   var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
