@@ -406,42 +406,38 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function showNotificationPermissionModal() {
-  if (Notification.permission === 'default') {
-    setTimeout(() => {
-      document.getElementById('notificationPermissionModal').style.display = 'flex';
-    }, 6000);
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  if (!isIOS && Notification.permission === 'default') {
+    document.getElementById('notificationPermissionModal').style.display = 'flex';
   }
 }
 
-document.getElementById('allowNotificationsBtn').addEventListener('click', function() {
-  requestNotificationPermission();
-  document.getElementById('notificationPermissionModal').style.display = 'none';
-});
-
-let notifications = [];
-
-async function requestNotificationPermission() {
+document.getElementById('allowNotificationsBtn').addEventListener('click', async function() {
   try {
     const permission = await Notification.requestPermission();
     if (permission === 'granted') {
-      const currentToken = await getToken(messaging, { 
-        vapidKey: 'BJY1HhXvT8V4AYQ97Legi5zSbRNq4WhXcKw_ikSXjYGa7jmzanXwYpxp5tylGlFTjhc6LtY7PUUg5wXhjkF3dRM'
-      });
+      document.getElementById('notificationPermissionModal').style.display = 'none';
       
-      if (currentToken) {
-        await fetch('https://yourserver.com/save-token', {
+      if ('serviceWorker' in navigator && 'PushManager' in window) {
+        const registration = await navigator.serviceWorker.ready;
+        const subscription = await registration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: 'BJY1HhXvT8V4AYQ97Legi5zSbRNq4WhXcKw_ikSXjYGa7jmzanXwYpxp5tylGlFTjhc6LtY7PUUg5wXhjkF3dRM'
+        });
+        
+        await fetch('https://yourserver.com/save-subscription', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ token: currentToken }),
+          body: JSON.stringify(subscription),
         });
       }
     }
   } catch (error) {
-    console.error("Error in notification permission:", error);
+    console.error("Error requesting notification permission:", error);
   }
-}
+});
 
 async function loadNews() {
   try {
@@ -495,39 +491,15 @@ const messaging = getMessaging(app);
 onMessage(messaging, (payload) => {
   console.log('Message received', payload);
   
-  notifications.push({
-    title: payload.notification.title,
-    body: payload.notification.body,
-    time: new Date().toISOString()
-  });
-  
-  updateNotificationBadge();
-  
   if (Notification.permission === 'granted') {
-    new Notification(payload.notification.title, {
+    const notification = new Notification(payload.notification.title, {
       body: payload.notification.body,
       icon: payload.notification.icon
     });
-  }
-});
-
-function updateNotificationBadge() {
-  if ('setAppBadge' in navigator) {
-    navigator.setAppBadge(notifications.length).catch(console.error);
-  }
-  
-  const badgeElement = document.getElementById('notificationBadge');
-  if (badgeElement) {
-    badgeElement.textContent = notifications.length > 0 ? notifications.length : '';
-    badgeElement.style.display = notifications.length > 0 ? 'block' : 'none';
-  }
-}
-
-window.addEventListener('focus', function() {
-  if ('clearAppBadge' in navigator) {
-    navigator.clearAppBadge().catch(error => {
-      console.error('Error clearing badge:', error);
-    });
+    
+    notification.onclick = () => {
+      window.focus();
+    };
   }
 });
 
