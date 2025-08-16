@@ -15,10 +15,13 @@
       font-family: 'Quicksand', sans-serif, Tahoma, sans-serif;
       margin: 0;
       padding: 0;
+      width: 100%;
+      min-height: 100vh;
       overflow-x: hidden;
     }
     html {
       overflow-x: hidden;
+      width: 100%;
     }
     header {
       background-color: #1b4242;
@@ -28,6 +31,7 @@
       border-bottom: 2px solid #4fbdbaff;
       justify-content: center;
       position: relative;
+      width: 100%;
     }
     header h1 {
       font-weight: 700;
@@ -38,6 +42,8 @@
       display: flex;
       align-items: center;
       gap: 10px;
+      width: 100%;
+      justify-content: center;
     }
     header h1 img {
       height: 60px;
@@ -51,6 +57,7 @@
       gap: 8px;
       padding: 12px 10px;
       align-items: center;
+      width: 100%;
     }
     nav a {
       display: inline-block;
@@ -79,6 +86,7 @@
       gap: 5px;
       flex: 0 0 100%;
       margin-top: 8px;
+      width: 100%;
     }
     nav form input[type="text"] {
       border: none;
@@ -107,16 +115,20 @@
       fill: currentColor;
     }
     .section {
-      max-width: 720px;
+      width: 100%;
+      max-width: 100%;
       margin: 30px auto;
       color: #e0f2f1;
+      padding: 0 15px;
+      box-sizing: border-box;
     }
     .article {
       background-color: #1b4242;
       border-radius: 12px;
-      padding: 20px 30px;
+      padding: 20px;
       box-shadow: 0 0 15px #4fbdbaff88;
       margin-bottom: 2.5rem;
+      width: 100%;
     }
     .article h3 {
       margin-top: 0;
@@ -138,9 +150,11 @@
     .article img {
       margin-top: 20px;
       width: 100%;
+      max-width: 100%;
       border-radius: 10px;
       border: 3px solid #4fbdbaff;
       user-select: none;
+      display: block;
     }
     footer {
       background-color: #142f2f;
@@ -154,6 +168,7 @@
       flex-direction: column;
       align-items: center;
       gap: 6px;
+      width: 100%;
     }
     #offlineMessage {
       display: none;
@@ -161,6 +176,7 @@
       margin-top: 50px;
       color: #fffd44;
       font-size: 1.2rem;
+      width: 100%;
     }
     #iosNotificationBtn {
       background-color: #4fbdbaff;
@@ -177,6 +193,20 @@
       border-radius: 12px;
       padding: 15px;
       box-shadow: 0 0 15px #4fbdbaff88;
+    }
+
+    @media (min-width: 768px) {
+      .section {
+        max-width: 720px;
+        padding: 0;
+      }
+      nav a {
+        font-size: 0.9rem;
+        padding: 6px 12px;
+      }
+      header h1 {
+        font-size: 2.2rem;
+      }
     }
   </style>
 </head>
@@ -211,7 +241,7 @@
 </nav>
 
 <section class="section" id="foryou">
-  <!-- سيتم تحميل المحتوى تلقائيا من foryou.html -->
+  <!-- المحتوى سيتم تحميله تلقائيا -->
 </section>
 
 <footer>
@@ -229,7 +259,7 @@ async function loadForyouContent() {
   } catch (error) {
     document.getElementById('foryou').innerHTML = `
       <div class="article">
-        <h3>أخبار بقرزلا</h3>
+        <h3>أهلاً بكم في بقرزلا</h3>
         <p>أحدث الأخبار والتحديثات حول قرية بقرزلا</p>
       </div>
     `;
