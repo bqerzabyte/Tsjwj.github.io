@@ -4,8 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>الموقع الرسمي بقرزلا</title>
-  <link rel="apple-touch-icon" sizes="180x180" href="/icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="icon.png">
   <meta name="apple-mobile-web-app-title" content="bqerzala">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="manifest" href="manifest.json">
   <style>
     body {
       background-color: #121212;
@@ -165,81 +167,34 @@
       color: #fffd44;
       padding: 20px;
     }
-    
-    #notificationPermissionModal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0,0,0,0.9);
-      z-index: 10000;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      color: #cdeed6;
-      text-align: center;
-      padding: 20px;
-      box-sizing: border-box;
-    }
-    
-    #notificationPermissionModal h2 {
-      color: #fffd44;
-      font-size: 1.8rem;
-      margin-bottom: 20px;
-    }
-    
-    #notificationPermissionModal p {
-      font-size: 1.2rem;
-      margin-bottom: 30px;
-      max-width: 500px;
-    }
-    
-    #allowNotificationsBtn {
-      background-color: #4fbdbaff;
-      color: #121212;
-      border: none;
-      padding: 12px 30px;
-      font-size: 1.2rem;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: background-color 0.3s;
-    }
-    
-    #allowNotificationsBtn:hover {
-      background-color: #3da8a8;
-    }
-    
-    /* نمط زر iOS الخاص */
     #iosNotificationBtn {
       background-color: #4fbdbaff;
       color: #121212;
       font-weight: bold;
     }
-    
     #iosNotificationBtn:hover {
       background-color: #3da8a8;
+    }
+    #installBtn {
+      display: none;
+      background-color: #fffd44;
       color: #121212;
+      font-weight: bold;
+    }
+    #installBtn:hover {
+      background-color: #e6e400;
     }
   </style>
 </head>
 <body>
 
-<div id="notificationPermissionModal" style="display: none;">
-  <h2>تفعيل الإشعارات</h2>
-  <p>للاستفادة من جميع ميزات الموقع، يرجى السماح بتلقي الإشعارات</p>
-  <button id="allowNotificationsBtn">السماح بالإشعارات</button>
-</div>
-
 <div id="offlineMessage">لا يوجد اتصال بالإنترنت. الرجاء التحقق من الشبكة.</div>
 
 <header>
   <h1>
-    <img src="https://cdn.glitch.global/01ad90b5-5958-4808-868b-6607b1facd24/Logo%20website%20bqerzala.9.png?v=1750385967410" alt="شعار قبل الموقع" />
+    <img src="icon.png" alt="شعار قبل الموقع" />
     الموقع الرسمي
-    <img src="https://cdn.glitch.global/01ad90b5-5958-4808-868b-6607b1facd24/Logo%20website%20bqerzala.9.png?v=1750385967410" alt="شعار بعد الموقع" />
+    <img src="icon.png" alt="شعار بعد الموقع" />
   </h1>
 </header>
 
@@ -250,8 +205,8 @@
   <a href="ta2es.html">الطقس</a>
   <a href="contactus.html">تواصل معنا</a>
   <a href="downloadapp.html">حمّل التطبيق</a>
-  <!-- زر الإشعارات الخاص بـ iOS -->
   <a id="iosNotificationBtn" href="#" style="display: none;">تفعيل الإشعارات</a>
+  <a id="installBtn" href="#" style="display: none;">إضافة إلى الشاشة الرئيسية</a>
   <form id="googleSearchForm" onsubmit="return doGoogleSearch(event)" role="search" aria-label="بحث جوجل في بقرزلا">
     <input type="text" id="searchInput" placeholder="ابحث في جوجل عن بقرزلا" aria-label="بحث في جوجل" />
     <button type="submit" aria-label="زر البحث">
@@ -271,41 +226,61 @@
 </footer>
 
 <script type="module">
+let unreadNotifications = 0;
+let deferredPrompt;
+
 document.addEventListener('DOMContentLoaded', function() {
-  // الكشف عن جهاز iOS
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
                 (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const isAndroid = /Android/i.test(navigator.userAgent);
   
-  // عرض زر الإشعارات الخاص بـ iOS إذا كان المستخدم على جهاز iOS
   if (isIOS) {
     const iosNotificationBtn = document.getElementById('iosNotificationBtn');
     iosNotificationBtn.style.display = 'inline-block';
-    
-    // إضافة حدث النقر لزر iOS
     iosNotificationBtn.addEventListener('click', function(e) {
       e.preventDefault();
       requestNotificationPermission();
     });
-  } else {
-    // للأجهزة الأخرى (أندرويد، ويندوز، إلخ) نعرض الطلب العادي
-    showNotificationPermissionModal();
+  } else if (isAndroid) {
+    requestNotificationPermission().catch(() => {});
   }
   
+  setupInstallButton();
   loadNews();
+  initBadge();
 });
 
-// دالة طلب إذن الإشعارات
+function initBadge() {
+  if ('setAppBadge' in navigator) {
+    const storedUnread = localStorage.getItem('unreadNotifications');
+    if (storedUnread) {
+      unreadNotifications = parseInt(storedUnread);
+      updateBadge();
+    }
+  }
+}
+
+function updateBadge() {
+  if ('setAppBadge' in navigator) {
+    if (unreadNotifications > 0) {
+      navigator.setAppBadge(unreadNotifications).catch(() => {});
+    } else {
+      navigator.clearAppBadge().catch(() => {});
+    }
+    localStorage.setItem('unreadNotifications', unreadNotifications.toString());
+  }
+}
+
+window.addEventListener('focus', function() {
+  unreadNotifications = 0;
+  updateBadge();
+});
+
 async function requestNotificationPermission() {
   try {
     const permission = await Notification.requestPermission();
-    
     if (permission === 'granted') {
-      alert('تم تفعيل الإشعارات بنجاح! شكراً لك.');
-      
-      // إخفاء زر iOS بعد الموافقة
       document.getElementById('iosNotificationBtn').style.display = 'none';
-      
-      // تسجيل الجهاز لاستقبال الإشعارات إذا كان ذلك ممكناً
       if ('serviceWorker' in navigator && 'PushManager' in window) {
         try {
           const registration = await navigator.serviceWorker.ready;
@@ -313,54 +288,51 @@ async function requestNotificationPermission() {
             userVisibleOnly: true,
             applicationServerKey: 'BJY1HhXvT8V4AYQ97Legi5zSbRNq4WhXcKw_ikSXjYGa7jmzanXwYpxp5tylGlFTjhc6LtY7PUUg5wXhjkF3dRM'
           });
-          
-          // إرسال بيانات الاشتراك إلى الخادم
           await fetch('https://yourserver.com/save-subscription', {
             method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
+            headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(subscription),
           });
-        } catch (error) {
-          console.error("Error in push subscription:", error);
-        }
+        } catch (error) {}
       }
-    } else {
-      alert('لن تتمكن من تلقي الإشعارات المهمة من الموقع.');
     }
+    return permission;
   } catch (error) {
-    console.error("Error requesting notification permission:", error);
-    alert('حدث خطأ أثناء محاولة تفعيل الإشعارات. يرجى المحاولة لاحقاً.');
+    throw error;
   }
 }
 
-// عرض نافذة طلب الإذن للإشعارات (لغير iOS)
-function showNotificationPermissionModal() {
-  if (Notification.permission === 'default') {
-    document.getElementById('notificationPermissionModal').style.display = 'flex';
-  }
+function setupInstallButton() {
+  const installBtn = document.getElementById('installBtn');
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    installBtn.style.display = 'inline-block';
+  });
+  installBtn.addEventListener('click', async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      deferredPrompt = null;
+      installBtn.style.display = 'none';
+    }
+  });
+  window.addEventListener('appinstalled', () => {
+    installBtn.style.display = 'none';
+    deferredPrompt = null;
+  });
 }
-
-// حدث النقر على زر السماح بالإشعارات (لغير iOS)
-document.getElementById('allowNotificationsBtn').addEventListener('click', async function() {
-  await requestNotificationPermission();
-  document.getElementById('notificationPermissionModal').style.display = 'none';
-});
 
 async function loadNews() {
   try {
     const response = await fetch('foryou.html');
-    if (!response.ok) throw new Error('Network response was not ok');
-    
+    if (!response.ok) throw new Error();
     const text = await response.text();
     const parser = new DOMParser();
     const doc = parser.parseFromString(text, 'text/html');
     const newsContent = doc.querySelector('#foryou').innerHTML;
-    
     document.querySelector('#foryou').innerHTML = newsContent;
   } catch (error) {
-    console.error('حدث خطأ في تحميل الأخبار:', error);
     document.querySelector('#foryou').innerHTML = `
       <div class="article">
         <h3>حدث خطأ في تحميل الأخبار</h3>
@@ -370,21 +342,23 @@ async function loadNews() {
   }
 }
 
-// تسجيل Service Worker لاستقبال الإشعارات
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/firebase-messaging-sw.js')
+    navigator.serviceWorker.register('firebase-messaging-sw.js')
       .then(registration => {
-        console.log('ServiceWorker registration successful');
-      }).catch(err => {
-        console.log('ServiceWorker registration failed: ', err);
-      });
+        registration.addEventListener('message', event => {
+          if (event.data?.type === 'NOTIFICATION_RECEIVED') {
+            unreadNotifications += event.data.count || 1;
+            updateBadge();
+          }
+        });
+      })
+      .catch(() => {});
   });
 }
 
-// تهيئة Firebase للرسائل
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
-import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-messaging.js";
+import { getMessaging, onMessage } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-messaging.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC2wTp0Afn_XmWCKhk1Bx3o13imBc1zIUc",
@@ -399,23 +373,22 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const messaging = getMessaging(app);
 
-// معالجة الرسائل الواردة عندما يكون التطبيق مفتوحاً
 onMessage(messaging, (payload) => {
-  console.log('Message received', payload);
-  
+  unreadNotifications++;
+  updateBadge();
   if (Notification.permission === 'granted') {
     const notification = new Notification(payload.notification.title, {
       body: payload.notification.body,
-      icon: payload.notification.icon
+      icon: payload.notification.icon || 'icon.png'
     });
-    
     notification.onclick = () => {
+      unreadNotifications = 0;
+      updateBadge();
       window.focus();
     };
   }
 });
 
-// التحقق من حالة الاتصال بالإنترنت
 function checkOnline() {
   if (!navigator.onLine) {
     document.getElementById('offlineMessage').style.display = 'block';
@@ -428,7 +401,6 @@ window.addEventListener('online', () => {
   document.getElementById('offlineMessage').style.display = 'none';
 });
 
-// منع النقر الأيمن على الصور
 document.querySelectorAll('img').forEach(img => {
   img.addEventListener('contextmenu', e => e.preventDefault());
   img.addEventListener('click', e => {
@@ -437,7 +409,6 @@ document.querySelectorAll('img').forEach(img => {
   });
 });
 
-// وظيفة البحث في جوجل
 function doGoogleSearch(e) {
   e.preventDefault();
   const query = document.getElementById('searchInput').value.trim();
@@ -448,6 +419,5 @@ function doGoogleSearch(e) {
   return false;
 }
 </script>
-
 </body>
 </html>
