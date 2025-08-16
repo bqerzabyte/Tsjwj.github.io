@@ -7,7 +7,6 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/icon.png">
   <meta name="apple-mobile-web-app-title" content="bqerzala">
   <style>
-  
     #welcomeVideoOverlay {
       position: fixed;
       top: 0;
@@ -19,11 +18,15 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      opacity: 1;
+      transition: opacity 1.5s ease;
     }
     #welcomeVideo {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      filter: brightness(100%);
+      transition: filter 1.5s ease;
     }
     
     body {
@@ -255,6 +258,66 @@
 </footer>
 
 <script type="module">
+document.addEventListener('DOMContentLoaded', function() {
+  const welcomeVideo = document.getElementById('welcomeVideo');
+  const welcomeVideoOverlay = document.getElementById('welcomeVideoOverlay');
+  
+  welcomeVideoOverlay.addEventListener('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    return false;
+  });
+  
+  welcomeVideo.addEventListener('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    return false;
+  });
+  
+  welcomeVideo.addEventListener('timeupdate', function() {
+    if (this.currentTime > this.duration - 2) {
+      welcomeVideo.style.filter = 'brightness(70%)';
+    }
+  });
+  
+  welcomeVideo.addEventListener('ended', function() {
+    welcomeVideoOverlay.style.opacity = '0';
+    setTimeout(() => {
+      welcomeVideoOverlay.style.display = 'none';
+      document.body.style.overflow = 'auto';
+      loadTawkTo();
+    }, 1500);
+  });
+  
+  welcomeVideo.play().catch(e => {
+    console.log("حدث خطأ في تشغيل الفيديو:", e);
+    welcomeVideoOverlay.style.display = 'none';
+    loadTawkTo();
+  });
+  
+  setTimeout(() => {
+    if (welcomeVideoOverlay.style.display !== 'none') {
+      welcomeVideoOverlay.style.opacity = '0';
+      setTimeout(() => {
+        welcomeVideoOverlay.style.display = 'none';
+        loadTawkTo();
+      }, 1500);
+    }
+  }, 10000);
+  
+  function loadTawkTo() {
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+      var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+      s1.async=true;
+      s1.src='https://embed.tawk.to/687db1a05d615919175d8226/1j0lfrnej';
+      s1.charset='UTF-8';
+      s1.setAttribute('crossorigin','*');
+      s0.parentNode.insertBefore(s1,s0);
+    })();
+  }
+});
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
 import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-messaging.js";
 
@@ -300,7 +363,6 @@ function checkOnline() {
 window.addEventListener('load', checkOnline);
 window.addEventListener('offline', checkOnline);
 
-// منع النسخ والضغط على الصور
 document.querySelectorAll('img').forEach(img => {
   img.addEventListener('contextmenu', e => e.preventDefault());
   img.addEventListener('click', e => {
@@ -309,7 +371,6 @@ document.querySelectorAll('img').forEach(img => {
   });
 });
 
-// بحث جوجل
 function doGoogleSearch(e) {
   e.preventDefault();
   const query = document.getElementById('searchInput').value.trim();
@@ -319,17 +380,6 @@ function doGoogleSearch(e) {
   window.open(url, '_blank');
   return false;
 }
-
-// Tawk.to للدردشة المباشرة
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-  var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-  s1.async=true;
-  s1.src='https://embed.tawk.to/687db1a05d615919175d8226/1j0lfrnej';
-  s1.charset='UTF-8';
-  s1.setAttribute('crossorigin','*');
-  s0.parentNode.insertBefore(s1,s0);
-})();
 </script>
 
 </body>
