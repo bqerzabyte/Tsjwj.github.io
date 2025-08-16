@@ -14,36 +14,6 @@
       height: 100%;
     }
     
-    #welcomeVideoOverlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: #000;
-      z-index: 9999;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      opacity: 1;
-      transition: opacity 1.5s ease;
-      -webkit-touch-callout: none;
-      -webkit-user-select: none;
-      -khtml-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-      touch-action: none;
-    }
-    #welcomeVideo {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: brightness(100%);
-      transition: filter 1.5s ease;
-      pointer-events: none;
-    }
-    
     body {
       background-color: #121212;
       color: #eee;
@@ -209,13 +179,6 @@
 </head>
 <body>
 
-<div id="welcomeVideoOverlay">
-  <video id="welcomeVideo" autoplay muted playsinline>
-    <source src="welcomevideo.mp4" type="video/mp4">
-    متصفحك لا يدعم تشغيل الفيديو.
-  </video>
-</div>
-
 <div id="offlineMessage">لا يوجد اتصال بالإنترنت. الرجاء التحقق من الشبكة.</div>
 
 <header>
@@ -253,56 +216,9 @@
 
 <script type="module">
 document.addEventListener('DOMContentLoaded', function() {
-  // إيقاف السكرول لمدة 0.7 ثواني
-  document.body.classList.add('no-scroll');
-  setTimeout(() => {
-    document.body.classList.remove('no-scroll');
-  }, 700);
-
-  const welcomeVideo = document.getElementById('welcomeVideo');
-  const welcomeVideoOverlay = document.getElementById('welcomeVideoOverlay');
-  
-  welcomeVideoOverlay.addEventListener('contextmenu', function(e) {
-    e.preventDefault();
-    return false;
-  }, {passive: false});
-  
-  welcomeVideo.addEventListener('contextmenu', function(e) {
-    e.preventDefault();
-    return false;
-  }, {passive: false});
-  
-  welcomeVideo.addEventListener('timeupdate', function() {
-    if (this.currentTime > this.duration - 2) {
-      welcomeVideo.style.filter = 'brightness(70%)';
-    }
-  });
-  
-  welcomeVideo.addEventListener('ended', function() {
-    welcomeVideoOverlay.style.opacity = '0';
-    setTimeout(() => {
-      welcomeVideoOverlay.style.display = 'none';
-    }, 1500);
-  });
-  
-  welcomeVideo.play().catch(e => {
-    console.log("حدث خطأ في تشغيل الفيديو:", e);
-    welcomeVideoOverlay.style.display = 'none';
-    loadTawkTo();
-  });
-  
-  setTimeout(() => {
-    if (welcomeVideoOverlay.style.display !== 'none') {
-      welcomeVideoOverlay.style.opacity = '0';
-      setTimeout(() => {
-        welcomeVideoOverlay.style.display = 'none';
-        loadTawkTo();
-      }, 1500);
-    }
-  }, 10000);
-
   // تحميل الأخبار تلقائياً
   loadNews();
+  loadTawkTo();
 });
 
 async function loadNews() {
