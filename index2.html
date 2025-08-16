@@ -216,7 +216,6 @@
 
 <script type="module">
 document.addEventListener('DOMContentLoaded', function() {
-  // تحميل الأخبار تلقائياً
   loadNews();
   loadTawkTo();
 });
@@ -242,8 +241,7 @@ async function loadNews() {
     `;
   }
 }
-
-// تسجيل Service Worker لـ FCM
+  
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/firebase-messaging-sw.js')
