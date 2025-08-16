@@ -211,6 +211,18 @@
     #allowNotificationsBtn:hover {
       background-color: #3da8a8;
     }
+    
+    /* نمط زر iOS الخاص */
+    #iosNotificationBtn {
+      background-color: #4fbdbaff;
+      color: #121212;
+      font-weight: bold;
+    }
+    
+    #iosNotificationBtn:hover {
+      background-color: #3da8a8;
+      color: #121212;
+    }
   </style>
 </head>
 <body>
@@ -238,6 +250,8 @@
   <a href="ta2es.html">الطقس</a>
   <a href="contactus.html">تواصل معنا</a>
   <a href="downloadapp.html">حمّل التطبيق</a>
+  <!-- زر الإشعارات الخاص بـ iOS -->
+  <a id="iosNotificationBtn" href="#" style="display: none;">تفعيل الإشعارات</a>
   <form id="googleSearchForm" onsubmit="return doGoogleSearch(event)" role="search" aria-label="بحث جوجل في بقرزلا">
     <input type="text" id="searchInput" placeholder="ابحث في جوجل عن بقرزلا" aria-label="بحث في جوجل" />
     <button type="submit" aria-label="زر البحث">
@@ -258,42 +272,80 @@
 
 <script type="module">
 document.addEventListener('DOMContentLoaded', function() {
-  showNotificationPermissionModal();
+  // الكشف عن جهاز iOS
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+                (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  
+  // عرض زر الإشعارات الخاص بـ iOS إذا كان المستخدم على جهاز iOS
+  if (isIOS) {
+    const iosNotificationBtn = document.getElementById('iosNotificationBtn');
+    iosNotificationBtn.style.display = 'inline-block';
+    
+    // إضافة حدث النقر لزر iOS
+    iosNotificationBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      requestNotificationPermission();
+    });
+  } else {
+    // للأجهزة الأخرى (أندرويد، ويندوز، إلخ) نعرض الطلب العادي
+    showNotificationPermissionModal();
+  }
+  
   loadNews();
 });
 
+// دالة طلب إذن الإشعارات
+async function requestNotificationPermission() {
+  try {
+    const permission = await Notification.requestPermission();
+    
+    if (permission === 'granted') {
+      alert('تم تفعيل الإشعارات بنجاح! شكراً لك.');
+      
+      // إخفاء زر iOS بعد الموافقة
+      document.getElementById('iosNotificationBtn').style.display = 'none';
+      
+      // تسجيل الجهاز لاستقبال الإشعارات إذا كان ذلك ممكناً
+      if ('serviceWorker' in navigator && 'PushManager' in window) {
+        try {
+          const registration = await navigator.serviceWorker.ready;
+          const subscription = await registration.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: 'BJY1HhXvT8V4AYQ97Legi5zSbRNq4WhXcKw_ikSXjYGa7jmzanXwYpxp5tylGlFTjhc6LtY7PUUg5wXhjkF3dRM'
+          });
+          
+          // إرسال بيانات الاشتراك إلى الخادم
+          await fetch('https://yourserver.com/save-subscription', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(subscription),
+          });
+        } catch (error) {
+          console.error("Error in push subscription:", error);
+        }
+      }
+    } else {
+      alert('لن تتمكن من تلقي الإشعارات المهمة من الموقع.');
+    }
+  } catch (error) {
+    console.error("Error requesting notification permission:", error);
+    alert('حدث خطأ أثناء محاولة تفعيل الإشعارات. يرجى المحاولة لاحقاً.');
+  }
+}
+
+// عرض نافذة طلب الإذن للإشعارات (لغير iOS)
 function showNotificationPermissionModal() {
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-  if (!isIOS && Notification.permission === 'default') {
+  if (Notification.permission === 'default') {
     document.getElementById('notificationPermissionModal').style.display = 'flex';
   }
 }
 
+// حدث النقر على زر السماح بالإشعارات (لغير iOS)
 document.getElementById('allowNotificationsBtn').addEventListener('click', async function() {
-  try {
-    const permission = await Notification.requestPermission();
-    if (permission === 'granted') {
-      document.getElementById('notificationPermissionModal').style.display = 'none';
-      
-      if ('serviceWorker' in navigator && 'PushManager' in window) {
-        const registration = await navigator.serviceWorker.ready;
-        const subscription = await registration.pushManager.subscribe({
-          userVisibleOnly: true,
-          applicationServerKey: 'BJY1HhXvT8V4AYQ97Legi5zSbRNq4WhXcKw_ikSXjYGa7jmzanXwYpxp5tylGlFTjhc6LtY7PUUg5wXhjkF3dRM'
-        });
-        
-        await fetch('https://yourserver.com/save-subscription', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(subscription),
-        });
-      }
-    }
-  } catch (error) {
-    console.error("Error requesting notification permission:", error);
-  }
+  await requestNotificationPermission();
+  document.getElementById('notificationPermissionModal').style.display = 'none';
 });
 
 async function loadNews() {
@@ -318,6 +370,7 @@ async function loadNews() {
   }
 }
 
+// تسجيل Service Worker لاستقبال الإشعارات
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/firebase-messaging-sw.js')
@@ -329,6 +382,7 @@ if ('serviceWorker' in navigator) {
   });
 }
 
+// تهيئة Firebase للرسائل
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
 import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-messaging.js";
 
@@ -345,6 +399,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const messaging = getMessaging(app);
 
+// معالجة الرسائل الواردة عندما يكون التطبيق مفتوحاً
 onMessage(messaging, (payload) => {
   console.log('Message received', payload);
   
@@ -360,18 +415,7 @@ onMessage(messaging, (payload) => {
   }
 });
 
-function loadTawkTo() {
-  var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-  (function(){
-    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-    s1.async=true;
-    s1.src='https://embed.tawk.to/687db1a05d615919175d8226/1j0lfrnej';
-    s1.charset='UTF-8';
-    s1.setAttribute('crossorigin','*');
-    s0.parentNode.insertBefore(s1,s0);
-  })();
-}
-
+// التحقق من حالة الاتصال بالإنترنت
 function checkOnline() {
   if (!navigator.onLine) {
     document.getElementById('offlineMessage').style.display = 'block';
@@ -384,6 +428,7 @@ window.addEventListener('online', () => {
   document.getElementById('offlineMessage').style.display = 'none';
 });
 
+// منع النقر الأيمن على الصور
 document.querySelectorAll('img').forEach(img => {
   img.addEventListener('contextmenu', e => e.preventDefault());
   img.addEventListener('click', e => {
@@ -392,6 +437,7 @@ document.querySelectorAll('img').forEach(img => {
   });
 });
 
+// وظيفة البحث في جوجل
 function doGoogleSearch(e) {
   e.preventDefault();
   const query = document.getElementById('searchInput').value.trim();
