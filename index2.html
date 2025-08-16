@@ -4,24 +4,56 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>الموقع الرسمي بقرزلا</title>
-  <link rel="apple-touch-icon" sizes="180x180" href="icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/icon.png">
   <meta name="apple-mobile-web-app-title" content="bqerzala">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <link rel="manifest" href="manifest.json">
   <style>
+    body.no-scroll {
+      overflow: hidden;
+      position: fixed;
+      width: 100%;
+      height: 100%;
+    }
+    
+    #welcomeVideoOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #000;
+      z-index: 9999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 1;
+      transition: opacity 1.5s ease;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      touch-action: none;
+    }
+    #welcomeVideo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(100%);
+      transition: filter 1.5s ease;
+      pointer-events: none;
+    }
+    
     body {
       background-color: #121212;
       color: #eee;
       font-family: 'Quicksand', sans-serif, Tahoma, sans-serif;
       margin: 0;
       padding: 0;
-      width: 100%;
-      min-height: 100vh;
       overflow-x: hidden;
     }
     html {
       overflow-x: hidden;
-      width: 100%;
     }
     header {
       background-color: #1b4242;
@@ -31,7 +63,6 @@
       border-bottom: 2px solid #4fbdbaff;
       justify-content: center;
       position: relative;
-      width: 100%;
     }
     header h1 {
       font-weight: 700;
@@ -42,8 +73,6 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      width: 100%;
-      justify-content: center;
     }
     header h1 img {
       height: 60px;
@@ -57,7 +86,6 @@
       gap: 8px;
       padding: 12px 10px;
       align-items: center;
-      width: 100%;
     }
     nav a {
       display: inline-block;
@@ -76,6 +104,9 @@
       background-color: #4fbdbaff;
       color: #121212;
     }
+    #enableNotifications {
+      display: none;
+    }
     nav form {
       display: flex;
       border: 2px solid #4fbdbaff;
@@ -86,7 +117,6 @@
       gap: 5px;
       flex: 0 0 100%;
       margin-top: 8px;
-      width: 100%;
     }
     nav form input[type="text"] {
       border: none;
@@ -115,20 +145,16 @@
       fill: currentColor;
     }
     .section {
-      width: 100%;
-      max-width: 100%;
+      max-width: 720px;
       margin: 30px auto;
       color: #e0f2f1;
-      padding: 0 15px;
-      box-sizing: border-box;
     }
     .article {
       background-color: #1b4242;
       border-radius: 12px;
-      padding: 20px;
+      padding: 20px 30px;
       box-shadow: 0 0 15px #4fbdbaff88;
       margin-bottom: 2.5rem;
-      width: 100%;
     }
     .article h3 {
       margin-top: 0;
@@ -150,11 +176,9 @@
     .article img {
       margin-top: 20px;
       width: 100%;
-      max-width: 100%;
       border-radius: 10px;
       border: 3px solid #4fbdbaff;
       user-select: none;
-      display: block;
     }
     footer {
       background-color: #142f2f;
@@ -168,7 +192,6 @@
       flex-direction: column;
       align-items: center;
       gap: 6px;
-      width: 100%;
     }
     #offlineMessage {
       display: none;
@@ -176,49 +199,30 @@
       margin-top: 50px;
       color: #fffd44;
       font-size: 1.2rem;
-      width: 100%;
     }
-    #iosNotificationBtn {
-      background-color: #4fbdbaff;
-      color: #121212;
-      font-weight: bold;
-    }
-    #iosNotificationBtn:hover {
-      background-color: #3da8a8;
-    }
-    .notification-style {
-      background-color: #1b4242;
-      color: #cdeed6;
-      border: 2px solid #4fbdbaff;
-      border-radius: 12px;
-      padding: 15px;
-      box-shadow: 0 0 15px #4fbdbaff88;
-    }
-
-    @media (min-width: 768px) {
-      .section {
-        max-width: 720px;
-        padding: 0;
-      }
-      nav a {
-        font-size: 0.9rem;
-        padding: 6px 12px;
-      }
-      header h1 {
-        font-size: 2.2rem;
-      }
+    .loading-news {
+      text-align: center;
+      color: #fffd44;
+      padding: 20px;
     }
   </style>
 </head>
 <body>
 
+<div id="welcomeVideoOverlay">
+  <video id="welcomeVideo" autoplay muted playsinline>
+    <source src="welcomevideo.mp4" type="video/mp4">
+    متصفحك لا يدعم تشغيل الفيديو.
+  </video>
+</div>
+
 <div id="offlineMessage">لا يوجد اتصال بالإنترنت. الرجاء التحقق من الشبكة.</div>
 
 <header>
   <h1>
-    <img src="icon.png" alt="شعار قبل الموقع" />
+    <img src="https://cdn.glitch.global/01ad90b5-5958-4808-868b-6607b1facd24/Logo%20website%20bqerzala.9.png?v=1750385967410" alt="شعار قبل الموقع" />
     الموقع الرسمي
-    <img src="icon.png" alt="شعار بعد الموقع" />
+    <img src="https://cdn.glitch.global/01ad90b5-5958-4808-868b-6607b1facd24/Logo%20website%20bqerzala.9.png?v=1750385967410" alt="شعار بعد الموقع" />
   </h1>
 </header>
 
@@ -229,7 +233,6 @@
   <a href="ta2es.html">الطقس</a>
   <a href="contactus.html">تواصل معنا</a>
   <a href="downloadapp.html">حمّل التطبيق</a>
-  <a id="iosNotificationBtn" href="#" style="display: none;">تفعيل الإشعارات</a>
   <form id="googleSearchForm" onsubmit="return doGoogleSearch(event)" role="search" aria-label="بحث جوجل في بقرزلا">
     <input type="text" id="searchInput" placeholder="ابحث في جوجل عن بقرزلا" aria-label="بحث في جوجل" />
     <button type="submit" aria-label="زر البحث">
@@ -241,7 +244,7 @@
 </nav>
 
 <section class="section" id="foryou">
-  <!-- المحتوى سيتم تحميله تلقائيا -->
+  <div class="loading-news">جاري تحميل الأخبار...</div>
 </section>
 
 <footer>
@@ -249,108 +252,159 @@
 </footer>
 
 <script type="module">
-let unreadNotifications = 0;
+document.addEventListener('DOMContentLoaded', function() {
+  // إيقاف السكرول لمدة 0.7 ثواني
+  document.body.classList.add('no-scroll');
+  setTimeout(() => {
+    document.body.classList.remove('no-scroll');
+  }, 700);
 
-async function loadForyouContent() {
+  const welcomeVideo = document.getElementById('welcomeVideo');
+  const welcomeVideoOverlay = document.getElementById('welcomeVideoOverlay');
+  
+  welcomeVideoOverlay.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+    return false;
+  }, {passive: false});
+  
+  welcomeVideo.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+    return false;
+  }, {passive: false});
+  
+  welcomeVideo.addEventListener('timeupdate', function() {
+    if (this.currentTime > this.duration - 2) {
+      welcomeVideo.style.filter = 'brightness(70%)';
+    }
+  });
+  
+  welcomeVideo.addEventListener('ended', function() {
+    welcomeVideoOverlay.style.opacity = '0';
+    setTimeout(() => {
+      welcomeVideoOverlay.style.display = 'none';
+    }, 1500);
+  });
+  
+  welcomeVideo.play().catch(e => {
+    console.log("حدث خطأ في تشغيل الفيديو:", e);
+    welcomeVideoOverlay.style.display = 'none';
+    loadTawkTo();
+  });
+  
+  setTimeout(() => {
+    if (welcomeVideoOverlay.style.display !== 'none') {
+      welcomeVideoOverlay.style.opacity = '0';
+      setTimeout(() => {
+        welcomeVideoOverlay.style.display = 'none';
+        loadTawkTo();
+      }, 1500);
+    }
+  }, 10000);
+
+  // تحميل الأخبار تلقائياً
+  loadNews();
+});
+
+async function loadNews() {
   try {
     const response = await fetch('foryou.html');
-    const content = await response.text();
-    document.getElementById('foryou').innerHTML = content;
+    if (!response.ok) throw new Error('Network response was not ok');
+    
+    const text = await response.text();
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(text, 'text/html');
+    const newsContent = doc.querySelector('#foryou').innerHTML;
+    
+    document.querySelector('#foryou').innerHTML = newsContent;
   } catch (error) {
-    document.getElementById('foryou').innerHTML = `
+    console.error('حدث خطأ في تحميل الأخبار:', error);
+    document.querySelector('#foryou').innerHTML = `
       <div class="article">
-        <h3>أهلاً بكم في بقرزلا</h3>
-        <p>أحدث الأخبار والتحديثات حول قرية بقرزلا</p>
+        <h3>حدث خطأ في تحميل الأخبار</h3>
+        <p>تعذر تحميل الأخبار. يرجى المحاولة لاحقاً أو التحقق من اتصال الإنترنت.</p>
       </div>
     `;
   }
 }
 
-function detectBrowser() {
-  const userAgent = navigator.userAgent;
-  if (userAgent.includes('Chrome')) return 'chrome';
-  if (userAgent.includes('Firefox')) return 'firefox';
-  if (userAgent.includes('SamsungBrowser')) return 'samsung';
-  return 'other';
-}
-
-async function initFCM() {
-  const firebaseConfig = {
-    apiKey: "AIzaSyC2wTp0Afn_XmWCKhk1Bx3o13imBc1zIUc",
-    authDomain: "bqerzala-ae4d8.firebaseapp.com",
-    projectId: "bqerzala-ae4d8",
-    storageBucket: "bqerzala-ae4d8.appspot.com",
-    messagingSenderId: "912894745948",
-    appId: "1:912894745948:web:773493f7afdd4866d03599",
-    measurementId: "G-1NMXR2DFYN"
-  };
-
-  const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js');
-  const { getMessaging, onMessage } = await import('https://www.gstatic.com/firebasejs/10.13.1/firebase-messaging.js');
-  
-  const app = initializeApp(firebaseConfig);
-  const messaging = getMessaging(app);
-  
-  onMessage(messaging, (payload) => {
-    unreadNotifications++;
-    if (Notification.permission === 'granted') {
-      new Notification(payload.notification.title, {
-        body: payload.notification.body,
-        icon: 'icon.png',
-        badge: 'icon.png'
+// تسجيل Service Worker لـ FCM
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/firebase-messaging-sw.js')
+      .then(registration => {
+        console.log('ServiceWorker registration successful');
+        requestNotificationPermission();
+      }).catch(err => {
+        console.log('ServiceWorker registration failed: ', err);
       });
-    }
   });
 }
 
-async function registerServiceWorker() {
-  if ('serviceWorker' in navigator) {
-    try {
-      const registration = await navigator.serviceWorker.register('firebase-messaging-sw.js');
-      navigator.serviceWorker.addEventListener('message', (event) => {
-        if (event.data?.type === 'NOTIFICATION_RECEIVED') {
-          unreadNotifications++;
-        }
-      });
-      return registration;
-    } catch (error) {}
-  }
-  return null;
-}
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-messaging.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyC2wTp0Afn_XmWCKhk1Bx3o13imBc1zIUc",
+  authDomain: "bqerzala-ae4d8.firebaseapp.com",
+  projectId: "bqerzala-ae4d8",
+  storageBucket: "bqerzala-ae4d8.appspot.com",
+  messagingSenderId: "912894745948",
+  appId: "1:912894745948:web:773493f7afdd4866d03599",
+  measurementId: "G-1NMXR2DFYN"
+};
+
+const app = initializeApp(firebaseConfig);
+const messaging = getMessaging(app);
 
 async function requestNotificationPermission() {
   try {
-    if (Notification.permission === 'granted') return;
     const permission = await Notification.requestPermission();
     if (permission === 'granted') {
-      const registration = await registerServiceWorker();
-      if (registration) {
-        const subscription = await registration.pushManager.subscribe({
-          userVisibleOnly: true,
-          applicationServerKey: 'BJY1HhXvT8V4AYQ97Legi5zSbRNq4WhXcKw_ikSXjYGa7jmzanXwYpxp5tylGlFTjhc6LtY7PUUg5wXhjkF3dRM'
-        });
-        await fetch('https://yourserver.com/save-subscription', {
+      const currentToken = await getToken(messaging, { 
+        vapidKey: 'BJY1HhXvT8V4AYQ97Legi5zSbRNq4WhXcKw_ikSXjYGa7jmzanXwYpxp5tylGlFTjhc6LtY7PUUg5wXhjkF3dRM'
+      });
+      
+      if (currentToken) {
+        await fetch('https://yourserver.com/save-token', {
           method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify(subscription)
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ token: currentToken }),
         });
-        await initFCM();
+        console.log('تم تفعيل الإشعارات بنجاح!');
       }
+    } else {
+      console.log('تم رفض الإشعارات');
     }
-  } catch (error) {}
+  } catch (error) {
+    console.error("Error in notification permission:", error);
+  }
 }
 
-function setupIOS() {
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-  if (isIOS) {
-    const iosBtn = document.getElementById('iosNotificationBtn');
-    if (Notification.permission === 'default') {
-      iosBtn.style.display = 'inline-block';
-      iosBtn.addEventListener('click', requestNotificationPermission);
-    } else {
-      iosBtn.style.display = 'none';
-    }
+onMessage(messaging, (payload) => {
+  console.log('Message received', payload);
+  const notificationTitle = payload.notification.title;
+  const notificationOptions = {
+    body: payload.notification.body,
+    icon: payload.notification.icon
+  };
+  
+  if (Notification.permission === 'granted') {
+    new Notification(notificationTitle, notificationOptions);
   }
+});
+
+function loadTawkTo() {
+  var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+  (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/687db1a05d615919175d8226/1j0lfrnej';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+  })();
 }
 
 function checkOnline() {
@@ -359,33 +413,30 @@ function checkOnline() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  loadForyouContent();
-  setupIOS();
-  if (!/iPad|iPhone|iPod/.test(navigator.userAgent)) {
-    requestNotificationPermission();
-  }
-  checkOnline();
-});
-
+window.addEventListener('load', checkOnline);
+window.addEventListener('offline', checkOnline);
 window.addEventListener('online', () => {
   document.getElementById('offlineMessage').style.display = 'none';
 });
 
-window.addEventListener('offline', checkOnline);
-
 document.querySelectorAll('img').forEach(img => {
   img.addEventListener('contextmenu', e => e.preventDefault());
+  img.addEventListener('click', e => {
+    e.preventDefault();
+    alert('هذه الصورة محمية بحقوق النشر ومخصصة للعرض حصراً على موقعنا الرسمي.');
+  });
 });
 
 function doGoogleSearch(e) {
   e.preventDefault();
   const query = document.getElementById('searchInput').value.trim();
   if (!query) return false;
-  const url = "https://www.google.com/search?q=" + encodeURIComponent(query + " في بقرزلا في عكار");
+  const finalQuery = encodeURIComponent(query + " في بقرزلا في عكار");
+  const url = "https://www.google.com/search?q=" + finalQuery;
   window.open(url, '_blank');
   return false;
 }
 </script>
+
 </body>
 </html>
