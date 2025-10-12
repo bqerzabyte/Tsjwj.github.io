@@ -263,12 +263,28 @@ async function loadNews(showLoading = true) {
     // استبدال المحتوى
     document.querySelector('#foryou').innerHTML = newsContent;
     
+    // تحميل الـ styles من foryou.html
+    const styles = doc.querySelectorAll('link[rel="stylesheet"], style');
+    styles.forEach(oldStyle => {
+      if (oldStyle.tagName === 'LINK') {
+        const newLink = document.createElement('link');
+        newLink.rel = 'stylesheet';
+        newLink.href = oldStyle.href;
+        document.head.appendChild(newLink);
+      } else if (oldStyle.tagName === 'STYLE') {
+        const newStyle = document.createElement('style');
+        newStyle.textContent = oldStyle.textContent;
+        document.head.appendChild(newStyle);
+      }
+    });
+    
     // البحث عن السكريبتات داخل المحتوى المحمل وتنفيذها
     const scripts = doc.querySelectorAll('script');
     scripts.forEach(oldScript => {
       const newScript = document.createElement('script');
       if (oldScript.src) {
         newScript.src = oldScript.src;
+        newScript.onload = () => console.log('Script loaded:', oldScript.src);
       } else {
         newScript.textContent = oldScript.textContent;
       }
