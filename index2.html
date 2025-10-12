@@ -260,7 +260,21 @@ async function loadNews(showLoading = true) {
     const doc = parser.parseFromString(text, 'text/html');
     const newsContent = doc.querySelector('#foryou').innerHTML;
     
+    // استبدال المحتوى
     document.querySelector('#foryou').innerHTML = newsContent;
+    
+    // البحث عن السكريبتات داخل المحتوى المحمل وتنفيذها
+    const scripts = doc.querySelectorAll('script');
+    scripts.forEach(oldScript => {
+      const newScript = document.createElement('script');
+      if (oldScript.src) {
+        newScript.src = oldScript.src;
+      } else {
+        newScript.textContent = oldScript.textContent;
+      }
+      document.head.appendChild(newScript);
+    });
+    
   } catch (error) {
     console.error('حدث خطأ في تحميل الأخبار:', error);
     if (!document.querySelector('#foryou').innerHTML.includes('حدث خطأ')) {
