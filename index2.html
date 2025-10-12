@@ -246,50 +246,32 @@ async function loadNews(showLoading = true) {
         '<div class="loading-news">جاري تحميل الأخبار...</div>';
     }
     
-    const response = await fetch(`foryou.html?t=${Date.now()}`, {
-      headers: {
-        'Cache-Control': 'no-cache',
-        'Pragma': 'no-cache'
+    // مسح المحتوى القديم
+    document.querySelector('#foryou').innerHTML = '';
+    
+    // إنشاء iframe جديد
+    const iframe = document.createElement('iframe');
+    iframe.src = `foryou.html?t=${Date.now()}`;
+    iframe.style.width = '100%';
+    iframe.style.height = '1000px'; // يمكن تعديل الارتفاع حسب الحاجة
+    iframe.style.border = 'none';
+    iframe.style.borderRadius = '12px';
+    iframe.style.overflow = 'hidden';
+    
+    // إضافة الـ iframe إلى القسم
+    document.querySelector('#foryou').appendChild(iframe);
+    
+    // تحميل الـ CSS الخاص بالـ iframe ليطابق التصميم
+    const iframeStyle = document.createElement('style');
+    iframeStyle.textContent = `
+      #foryou iframe {
+        width: 100% !important;
+        min-height: 800px;
+        border: none !important;
+        background: transparent !important;
       }
-    });
-    
-    if (!response.ok) throw new Error('Network response was not ok');
-    
-    const text = await response.text();
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(text, 'text/html');
-    const newsContent = doc.querySelector('#foryou').innerHTML;
-    
-    // استبدال المحتوى
-    document.querySelector('#foryou').innerHTML = newsContent;
-    
-    // تحميل الـ styles من foryou.html
-    const styles = doc.querySelectorAll('link[rel="stylesheet"], style');
-    styles.forEach(oldStyle => {
-      if (oldStyle.tagName === 'LINK') {
-        const newLink = document.createElement('link');
-        newLink.rel = 'stylesheet';
-        newLink.href = oldStyle.href;
-        document.head.appendChild(newLink);
-      } else if (oldStyle.tagName === 'STYLE') {
-        const newStyle = document.createElement('style');
-        newStyle.textContent = oldStyle.textContent;
-        document.head.appendChild(newStyle);
-      }
-    });
-    
-    // البحث عن السكريبتات داخل المحتوى المحمل وتنفيذها
-    const scripts = doc.querySelectorAll('script');
-    scripts.forEach(oldScript => {
-      const newScript = document.createElement('script');
-      if (oldScript.src) {
-        newScript.src = oldScript.src;
-        newScript.onload = () => console.log('Script loaded:', oldScript.src);
-      } else {
-        newScript.textContent = oldScript.textContent;
-      }
-      document.head.appendChild(newScript);
-    });
+    `;
+    document.head.appendChild(iframeStyle);
     
   } catch (error) {
     console.error('حدث خطأ في تحميل الأخبار:', error);
