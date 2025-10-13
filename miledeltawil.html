@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MILED EL TAWIL</title>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+  />
+  <style>
+    :root {
+      --back-top: 10px;    
+      --back-left: 10px;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html,
+    body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+    body {
+      background: url('https://cdn.glitch.global/01ad90b5-5958-4808-868b-6607b1facd24/Background%20web.jpg?v=1750033930733')
+        no-repeat center center fixed;
+      background-size: cover;
+      position: relative;
+      font-family: Arial, sans-serif;
+      color: #fff;
+    }
+
+    
+    .header-image {
+      position: absolute;
+      top: calc(50% - 365px); /* فوق النص */
+      left: 50%;
+      transform: translateX(-50%);
+      width: 108vw;
+      height: auto;
+      max-height: 350px; /* تحكم في ارتفاع الصورة */
+      user-select: none;
+      pointer-events: none;
+      filter: brightness(200);
+      transition: filter 0.3s ease;
+      z-index: 15;
+    }
+
+    /* كلمة back في أعلى الشمال */
+    .back-link {
+      position: fixed;
+      top: var(--back-top);
+      left: var(--back-left);
+      right: auto;
+      padding: 6px 15px;
+      border: 2px solid #00cc44;
+      color: #fff;
+      font-weight: bold;
+      font-size: 18px;
+      text-decoration: none;
+      background-color: transparent;
+      border-radius: 5px;
+      z-index: 25;
+      user-select: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .back-link:hover {
+      background-color: #00cc44;
+      color: #000;
+    }
+
+    .header-text {
+      position: absolute;
+      top: calc(50% - 220px);
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 24px;
+      font-weight: bold;
+      color: #aaffaa;
+      text-align: center;
+      white-space: nowrap;
+      user-select: none;
+      opacity: 0.7;
+      text-shadow: none;
+      transition: text-shadow 0.3s, opacity 0.3s;
+      z-index: 20;
+    }
+
+    .icons {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      gap: 40px;
+      z-index: 10;
+      user-select: none;
+    }
+
+    .icons a {
+      font-size: 60px;
+      color: #222;
+      position: relative;
+      text-decoration: none;
+    }
+
+    .icons a::before {
+      content: attr(data-icon);
+      position: absolute;
+      top: 0;
+      left: 0;
+      font-size: 60px;
+      height: 0;
+      overflow: hidden;
+      transition: height 0.5s ease-in-out;
+    }
+
+    .icons a:hover::before {
+      height: 100%;
+    }
+
+    .icons a.instagram::before {
+      content: "\f16d";
+      background-image: linear-gradient(
+        45deg,
+        #f09433 0%,
+        #f25d366 25%,
+        #dc2743 50%,
+        #cc2366 75%,
+        #bc1888 100%
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      border-bottom: 4px solid #dc2743;
+    }
+
+    .icons a.whatsapp::before {
+      content: "\f232";
+      color: #25d366;
+      border-bottom: 4px solid #25d366;
+    }
+
+    .icons a.twitter::before {
+      content: "\f099";
+      color: #1da1f2;
+      border-bottom: 4px solid #1da1f2;
+    }
+
+    .threeD {
+      position: absolute;
+      top: calc(50% + 100px);
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      user-select: none;
+    }
+
+    .threeD img {
+      width: 90px;
+      cursor: pointer;
+    }
+
+    .rain-image {
+      position: fixed;
+      width: 80px;
+      filter: brightness(1.2);
+      animation: fall linear infinite;
+      pointer-events: none;
+      z-index: 1;
+      user-select: none;
+      border: none;
+      background: transparent;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-100px) rotate(0deg);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(120vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <img
+    src="https://cdn.glitch.global/01ad90b5-5958-4808-868b-6607b1facd24/This%20for%20glowing.png?v=1750038065253"
+    alt="Glowing Background"
+    class="header-image"
+    id="headerImage"
+    draggable="false"
+  />
+
+  <a href="Vegetables.html" class="back-link">back</a>
+
+  <div class="header-text" id="headerText">MILED EL TAWIL</div>
+
+
+<div class="icons">
+  <a href="https://maps.app.goo.gl/UPnQeHMA6wyhL3DW8" class="instagram" style="display: inline-block;">
+    <img
+      src="https://cdn.glitch.global/01ad90b5-5958-4808-868b-6607b1facd24/Maps.png?v=1750040878212"
+      alt="Instagram Logo"
+      style="width: 60px; height: 60px; object-fit: contain;"
+    />
+</a>
+<a href="tel:+9613638495" class="twitter" style="display: inline-block;">
+  <img
+    src="https://cdn.glitch.global/01ad90b5-5958-4808-868b-6607b1facd24/Phone icon6.png?v=1750040879204"
+    alt="Twitter Logo"
+    style="width: 60px; height: 60px; object-fit: contain;"
+  />
+</a>
+<a href="https://wa.me/9613638495" class="whatsapp" style="display: inline-block;">
+  <img
+    src="https://cdn.glitch.global/01ad90b5-5958-4808-868b-6607b1facd24/Whatsapp icon0.png?v=1750040886051"
+    alt="Whatsapp Logo"
+    style="width: 60px; height: 60px; object-fit: contain;"
+  />
+</a>
+  </div>
+
+  <div class="threeD">
+    <a
+      href="https://www.google.com/maps/@34.512035,36.0542,3a,75.0y,342.56552h,77.451706t/data=!3m4!1e1!3m2!1sNw9_54mhftVJuYhT92FXCg!2e0?g_st=ac"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <img
+        src="https://cdn.glitch.global/01ad90b5-5958-4808-868b-6607b1facd24/Picsart_25-06-16_03-50-34-747.png?v=1750035069844"
+        alt="3D Icon"
+      />
+    </a>
+  </div>
+
+  <script>
+    const headerText = document.getElementById("headerText");
+    const headerImage = document.getElementById("headerImage");
+
+    let glowOn = false;
+    let count = 0;
+
+    function setGlow(on) {
+      if (on) {
+        const glowStyle =
+          "0 0 5px #0f0, 0 0 10px #0f0, 0 0 20px #0f0, 0 0 40px #0f0";
+        headerText.style.textShadow = glowStyle;
+        headerText.style.opacity = "1";
+        headerImage.style.filter = "brightness(1.3) drop-shadow(0 0 10px #0f0)";
+      } else {
+        headerText.style.textShadow = "none";
+        headerText.style.opacity = "0.7";
+        headerImage.style.filter = "brightness(0.8)";
+      }
+    }
+
+    function blinkSequence() {
+      if (count < 20) {
+        glowOn = !glowOn;
+        setGlow(glowOn);
+        count++;
+        setTimeout(blinkSequence, 100);
+      } else if (count < 28) {
+        glowOn = !glowOn;
+        setGlow(glowOn);
+        count++;
+        setTimeout(blinkSequence, 500);
+      } else if (count < 32) {
+        glowOn = !glowOn;
+        setGlow(glowOn);
+        count++;
+        setTimeout(blinkSequence, 1000);
+      } else {
+        setGlow(true);
+      }
+    }
+
+    blinkSequence();
+
+    const rainCount = 9;
+    for (let i = 0; i < rainCount; i++) {
+      const img = document.createElement("img");
+      img.src =
+        "https://cdn.glitch.global/01ad90b5-5958-4808-868b-6607b1facd24/Picsart_25-06-19_04-18-50-753.png?v=1750295944953";
+      img.classList.add("rain-image");
+      img.style.left = Math.random() * 100 + "vw";
+      img.style.animationDuration = 4 + Math.random() * 3 + "s";
+      img.style.top = -Math.random() * 200 + "px";
+      document.body.appendChild(img);
+    }
+  </script>
+</body>
+</html>
