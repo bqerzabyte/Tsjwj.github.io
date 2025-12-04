@@ -42,8 +42,9 @@
 
 <script>
 function handleCredentialResponse(response) {
-    // هنا نقدر نتحقق من response.credential لو بدك تخزنه
-    // بعد تسجيل الدخول نروح على الصفحة الرئيسية
+    // تخزين حالة الدخول
+    sessionStorage.setItem('loggedIn', 'true');
+    // تحويل إلى الصفحة الرئيسية
     window.location.href = "index.html";
 }
 </script>
