@@ -6,7 +6,7 @@
 <title>إغلاق المشروع</title>
 
 <script>
-    // تحقق من تسجيل الدخول
+    // تحقق من تسجيل الدخول قبل تحميل أي محتوى
     if (!sessionStorage.getItem('loggedIn')) {
         window.location.href = "Login.html";
     }
@@ -29,6 +29,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         justify-content: center;
         align-items: center;
         height: 100vh;
+        flex-direction: column;
     }
     .container {
         background-color: #FFFBF4;
@@ -52,6 +53,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         margin-top: 20px;
         display: block;
     }
+    #signout-btn {
+        margin-top: 20px;
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        background-color: #e74c3c;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    #signout-btn:hover {
+        background-color: #c0392b;
+    }
 </style>
 </head>
 <body>
@@ -69,6 +83,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <p>أشكر كل من تابع المشروع واهتم به، وأؤكد أن الهدف كان وسيظل خدمة الضيعة وأهلها وتعزيز حضورها وتطورها.</p>
 
     <div class="signature">Elie Joseph Al Ahmar</div>
+    <button id="signout-btn">تسجيل الخروج</button>
 </div>
+
+<script>
+document.getElementById('signout-btn').addEventListener('click', function() {
+    sessionStorage.removeItem('loggedIn');
+    window.location.href = "Login.html";
+});
+</script>
 </body>
 </html>
