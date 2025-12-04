@@ -1,48 +1,47 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="UTF-8">
-  <title>Sign-up</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body {
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      height:100vh;
-      background:#f2f2f2;
-      font-family:Roboto,Helvetica,Arial,sans-serif;
-    }
-    button#googleSignIn {
-      padding:12px 20px;
-      background:white;
-      border:none;
-      border-radius:99rem;
-      cursor:pointer;
-      display:flex;
-      align-items:center;
-      font-weight:500;
-    }
-    button#googleSignIn img {
-      width:18px;
-      height:18px;
-      margin-right:8px;
-    }
-  </style>
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Google Sign Up</title>
+<style>
+  body {
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    background:#f2f2f2;
+    font-family:Roboto,Helvetica,Arial,sans-serif;
+  }
+  button {
+    padding:12px 20px;
+    background:#fff;
+    border:none;
+    border-radius:99rem;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    font-weight:500;
+  }
+  button img {
+    width:18px;
+    height:18px;
+    margin-right:8px;
+  }
+</style>
 </head>
 <body>
-  <button id="googleSignIn">
-    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Icon">
-      Google sign up
-  </button>
 
-  <script>
-    const CLIENT_ID = "912894745948-ckbgjohjoopt3j13pvsblokk74gsojpq.apps.googleusercontent.com";
+<button id="googleSignUp">
+  <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Icon">
+  Google Sign Up
+</button>
 
-    function handleCredentialResponse(response) {
-      console.log("JWT ID Token:", response.credential);
-      window.location.href = "data:text/html;charset=utf-8," + encodeURIComponent(`<!DOCTYPE html>
+<script>
+  const CLIENT_ID = "912894745948-ckbgjohjoopt3j13pvsblokk74gsojpq.apps.googleusercontent.com";
+
+  // صفحة المشروع المغلق
+  const PROJECT_PAGE = `<!DOCTYPE html>
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
@@ -65,19 +64,18 @@ p {margin:8px 0;}
 <div class="signature">Elie Joseph Al Ahmar</div>
 </div>
 </body>
-</html>`);
-    }
+</html>`;
 
-    window.onload = function() {
-      google.accounts.id.initialize({
-        client_id: CLIENT_ID,
-        callback: handleCredentialResponse
-      });
+  document.getElementById('googleSignUp').addEventListener('click', function(){
+    const oauthURL = "https://accounts.google.com/o/oauth2/v2/auth" +
+      "?client_id=" + encodeURIComponent(CLIENT_ID) +
+      "&redirect_uri=" + encodeURIComponent("data:text/html;charset=utf-8," + encodeURIComponent(PROJECT_PAGE)) +
+      "&response_type=token" +
+      "&scope=" + encodeURIComponent("openid email profile") +
+      "&prompt=select_account";
+    window.location.href = oauthURL;
+  });
+</script>
 
-      document.getElementById('googleSignIn').addEventListener('click', function() {
-        google.accounts.id.prompt();
-      });
-    }
-  </script>
 </body>
 </html>
