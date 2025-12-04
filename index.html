@@ -1,70 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <title>Google Sign-in and Redirect</title>
+  <title>Google Sign-in</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    @-webkit-keyframes waiting {
-      0% {transform: scale(1);box-shadow:0 0 8px rgba(0,0,0,0.18),0 8px 16px rgba(0,0,0,0.36),0 0 0 rgba(0,0,0,0),0 0 0 0 rgba(255,255,255,0);}
-      25% {transform: scale(0.6);box-shadow:0 0 0 rgba(0,0,0,0),0 0 0 rgba(0,0,0,0),0 0 0 rgba(0,0,0,0),0 0 0 0 rgba(255,255,255,0);}
-      50% {transform: scale(1.2);box-shadow:0 2px 12px 0 rgba(0,0,0,0.14),0 3px 31px -2px rgba(0,0,0,0.2),0 1px 5px 0 rgba(0,0,0,0.12),0 0 0 15vw white;}
-      100% {transform: scale(1);box-shadow:0 0 8px rgba(0,0,0,0.18),0 8px 16px rgba(0,0,0,0.36),0 1px 5px 0 rgba(0,0,0,0.12),0 0 0 100vw rgba(255,255,255,0);}
+    body {
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      height:100vh;
+      background:#f2f2f2;
+      font-family:Roboto,Helvetica,Arial,sans-serif;
     }
-    @keyframes waiting {
-      0% {transform: scale(1);box-shadow:0 0 8px rgba(0,0,0,0.18),0 8px 16px rgba(0,0,0,0.36),0 0 0 rgba(0,0,0,0),0 0 0 0 rgba(255,255,255,0);}
-      25% {transform: scale(0.6);box-shadow:0 0 0 rgba(0,0,0,0),0 0 0 rgba(0,0,0,0),0 0 0 rgba(0,0,0,0),0 0 0 0 rgba(255,255,255,0);}
-      50% {transform: scale(1.2);box-shadow:0 2px 12px 0 rgba(0,0,0,0.14),0 3px 31px -2px rgba(0,0,0,0.2),0 1px 5px 0 rgba(0,0,0,0.12),0 0 0 15vw white;}
-      100% {transform: scale(1);box-shadow:0 0 8px rgba(0,0,0,0.18),0 8px 16px rgba(0,0,0,0.36),0 1px 5px 0 rgba(0,0,0,0.12),0 0 0 100vw rgba(255,255,255,0);}
-    }
-    @-webkit-keyframes loaded {
-      0% {transform: scale(1);box-shadow:0 0 8px rgba(0,0,0,0.18),0 8px 16px rgba(0,0,0,0.36),0 0 0 rgba(0,0,0,0),0 0 0 0 rgba(255,255,255,0);}
-      100% {opacity:0;transform:scale(0);box-shadow:0 0 0 rgba(0,0,0,0),0 0 0 rgba(0,0,0,0),0 0 0 0 rgba(0,0,0,0),0 0 0 0 rgba(255,255,255,0);}
-    }
-    @keyframes loaded {
-      0% {transform: scale(1);box-shadow:0 0 8px rgba(0,0,0,0.18),0 8px 16px rgba(0,0,0,0.36),0 0 0 rgba(0,0,0,0),0 0 0 0 rgba(255,255,255,0);}
-      100% {opacity:0;transform:scale(0);box-shadow:0 0 0 rgba(0,0,0,0),0 0 0 rgba(0,0,0,0),0 0 0 0 rgba(0,0,0,0),0 0 0 0 rgba(255,255,255,0);}
-    }
-
-    *{-webkit-tap-highlight-color:rgba(0,0,0,0);box-sizing:border-box;}
-    .noselect{-webkit-touch-callout:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;}
-    :focus{outline:0;}
-    html,body{height:100%;}
-    body{display:flex;align-items:center;justify-content:center;background:#f2f2f2;font-family:Roboto,Helvetica,Arial,sans-serif;}
-    .flex-center--all{display:flex;align-items:center;justify-content:center;}
-    button.firebaseui-idp-google{
+    button#googleSignIn {
       padding:12px 20px;
       background:white;
-      border:0;
+      border:none;
       border-radius:99rem;
-      box-shadow:0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.2),0 1px 5px 0 rgba(0,0,0,0.12);
-      outline:0;overflow:hidden;will-change:box-shadow;transform:scale(1);transition:0.2s all;cursor:pointer;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      font-weight:500;
     }
-    @media not all and (pointer: coarse){
-      button.firebaseui-idp-google:hover{box-shadow:0 0 8px rgba(0,0,0,0.18),0 8px 16px rgba(0,0,0,0.36);}
+    button#googleSignIn img {
+      width:18px;
+      height:18px;
+      margin-right:8px;
     }
-    button.firebaseui-idp-google.clicked{padding:12px;background:#f6f6f6;box-shadow:0 0 8px rgba(0,0,0,0.18),0 8px 16px rgba(0,0,0,0.36);filter:grayscale(100%);cursor:default;}
-    button.firebaseui-idp-google.clicked .firebaseui-idp-text{height:0;width:0;margin:0;opacity:0;}
-    button.firebaseui-idp-google.waiting{-webkit-animation:waiting 2s linear infinite;animation:waiting 2s linear infinite;}
-    button.firebaseui-idp-google.loaded{-webkit-animation:loaded 0.2s linear forwards;animation:loaded 0.2s linear forwards;}
-    button.firebaseui-idp-google .firebaseui-idp-icon-wrapper{height:18px;width:18px;}
-    button.firebaseui-idp-google .firebaseui-idp-icon-wrapper img{height:100%;width:auto;}
-    button.firebaseui-idp-google .firebaseui-idp-text{margin-left:.5rem;font-weight:500;transition:0.3s height width;}
-    button.firebaseui-idp-google .firebaseui-idp-text-long{display:none;}
-    @media (min-width:269px){button.firebaseui-idp-google .firebaseui-idp-text-long{display:inline-block;}}
-    button.firebaseui-idp-google .firebaseui-idp-text-short{display:inline-block;}
-    @media (min-width:269px){button.firebaseui-idp-google .firebaseui-idp-text-short{display:none;}}
   </style>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
 </head>
 <body>
-  <button id="googleSignIn" class="firebaseui-idp-google flex-center--all noselect">
-    <span class="firebaseui-idp-icon-wrapper">
-      <img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg">
-    </span>
-    <span class="firebaseui-idp-text firebaseui-idp-text-long">Sign in with Google</span>
-    <span class="firebaseui-idp-text firebaseui-idp-text-short">Google</span>
+  <button id="googleSignIn">
+    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Icon">
+    تسجيل الدخول عبر Google
   </button>
 
   <script>
@@ -82,7 +52,7 @@
 body {margin:0;padding:0;background-color:#FFFBF4;font-family:Segoe UI,Tahoma,Geneva,Verdana,sans-serif;color:#11120D;display:flex;justify-content:center;align-items:center;height:100vh;}
 .container {background-color:#FFFBF4;padding:20px;text-align:right;line-height:1.5;font-size:14px;}
 p {margin:8px 0;}
-.underline {border-bottom:2px solid #11120D;padding-bottom:2px;}
+.underline {border-bottom: 2px solid #11120D;padding-bottom:2px;}
 .signature {text-align:center;font-size:20px;font-weight:bold;color:#565449;margin-top:20px;display:block;}
 </style>
 </head>
@@ -100,22 +70,13 @@ p {margin:8px 0;}
 
     window.onload = function() {
       google.accounts.id.initialize({
-        client_id: 912894745948-ckbgjohjoopt3j13pvsblokk74gsojpq.apps.googleusercontent.com,
+        client_id: CLIENT_ID,
         callback: handleCredentialResponse
       });
 
-      $('#googleSignIn').on('click', function() {
-        $(this).addClass('clicked waiting');
+      document.getElementById('googleSignIn').addEventListener('click', function() {
         google.accounts.id.prompt();
-        setTimeout(profileLoaded, 4000);
       });
-    }
-
-    function profileLoaded(){
-      $('#googleSignIn').removeClass('waiting').addClass('loaded');
-      setTimeout(function(){
-        $('#googleSignIn').removeClass('clicked loaded');
-      },2000);
     }
   </script>
 </body>
